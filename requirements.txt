@@ -1,0 +1,4 @@
+absl_py==2.1.0
+colorama==0.4.4
+openai==1.70.0
+termcolor==3.0.0
