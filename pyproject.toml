@@ -21,6 +21,8 @@ dependencies = [
   'colorama',
   'openai',
   'termcolor',
+  'instructor',
+  'google-genai',
 ]
 
 [project.urls]
