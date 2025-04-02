@@ -23,6 +23,8 @@ dependencies = [
   'termcolor',
   'instructor',
   'google-genai',
+  'dotenv',
+  'pydantic',
 ]
 
 [project.urls]
