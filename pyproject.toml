@@ -25,6 +25,7 @@ dependencies = [
   'google-genai',
   'dotenv',
   'pydantic',
+  'jsonref',
 ]
 
 [project.urls]
