@@ -37,6 +37,8 @@ Y-axis: [DESCRIPTION: estimated force range and justification based on friction,
 
 Z-axis: [DESCRIPTION: estimated force range and justification based on friction, mass, resistance].
 
+Grasping force: [DESCRIPTION: estimated force range and justification based on friction, mass, resistance].
+
 Detailed Force Estimation Reasoning:
 - Object Properties: [DESCRIPTION: estimated mass, material, stiffness, friction coefficient, if object is articulated, do the same reasoning for whatever joint / degree of freedom enables motion].
 - Contact Type: [DESCRIPTION: e.g., “edge contact,” “surface press,” “pinch grip,” etc.].
@@ -54,6 +56,7 @@ Final Computed Estimated Forces:
 X-axis: [PNUM: 0.0–0.0] N  
 Y-axis: [PNUM: 0.0–0.0] N  
 Z-axis: [PNUM: 0.0–0.0] N  
+Grasp: [PNUM: 0.0–0.0] N  
 [end of motion plan]
 
 Rules:
