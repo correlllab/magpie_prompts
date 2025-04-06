@@ -67,3 +67,54 @@ Rules:
 5. Use common sense where exact properties are ambiguous, and explain assumptions.
 6. Do not include any sections outside the start/end blocks or add non-specified bullet points.
 """
+
+import re
+import sys
+
+import magpie_prompts.safe_executor as safe_executor
+import magpie_prompts.llm_prompt as llm_prompt
+import magpie_prompts.process_code as process_code
+import magpie_prompts.magpie_execution as magpie_execution
+
+class PromptMotionThinker(llm_prompt.LLMPrompt):
+  """Prompt with both Motion Descriptor and Motion Coder."""
+
+  def __init__(
+      self,
+      executor: safe_executor.SafeExecutor,
+  ):
+    # self._agent = client.agent()
+    self._safe_executor = magpie_execution.MagpieSafeExecutor(executor)
+
+    self.name = "LanguageAndVision2StructuredLang2GraspParameters"
+
+    self.num_llms = 1
+    self.prompts = [prompt_motion_thinker]
+
+    # The coder doesn't need to keep the history as it only serves a purpose for
+    # translating to code
+    self.keep_message_history = [True, False]
+    self.response_processors = [
+        self.process_thinker_response,
+    ]
+    self.code_executor = self.execute_code
+
+  # process the response from thinker, the output will be used as input to coder
+  def process_thinker_response(self, response: str) -> str:
+    try:
+      motion_description = (
+          re.split(
+              "end of description",
+              re.split("start of description", response, flags=re.IGNORECASE)[
+                  1
+              ],
+              flags=re.IGNORECASE,
+          )[0]
+          .strip("[")
+          .strip("]")
+          .strip()
+          .strip("```")
+      )
+      return motion_description
+    except Exception as _:  # pylint: disable=broad-exception-caught
+      return response
