@@ -51,26 +51,28 @@ Detailed Force Reasoning:
 
 Physical Model (if applicable):
 - Use Newton’s laws, torque estimates, or friction models if relevant.
-- Show your math or approximations clearly. For example:
-  "Torque τ = I * α, with I = 1/3 M L² for rectangular lid rotating on hinge..."
-  "Force F = τ / r, where r is distance from hinge to contact."
+- Show your math or approximations clearly.
+- Relevant quantities and estimates: {{DESCRIPTION: include any relevant quantities and estimates used in the calculations}}.
+- Relevant equations: {{DESCRIPTION: include any relevant equations used in the calculations}}.
+- Relevant assumptions: {{DESCRIPTION: include any relevant assumptions made in the calculations}}.
+- Computations: {{DESCRIPTION: include in full detail any relevant calculations using the above information}}.
 
-Final Computed Forces:
-X-axis: {{NUM: 0.0–0.0}} N  
-Y-axis: {{NUM: 0.0–0.0}} N  
-Z-axis: {{NUM: 0.0–0.0}} N  
-Grasp: {{PNUM: 0.0–0.0}} N  
+Computed Forces with Estimate Ranges:
+X-axis: {{NUM: 0.0}} to {{NUM: 0.0}} N  
+Y-axis: {{NUM: 0.0}} to {{NUM: 0.0}} N  
+Z-axis: {{NUM: 0.0}} to {{NUM: 0.0}} N  
+Grasp: {{PNUM: 0.0}} to {{PNUM: 0.0}} N  
 
-Python Code:
+Python Code with Final Motion Plan:
 ```python
 # describe the motion along the [x, y, z] axes as either positive, negative, or no motion
 position_direction = [{{CHOICE: [-1, 0, 1}}, {{CHOICE: [-1, 0, 1}}, {{CHOICE: [-1, 0, 1}}]
 # resolve the magnitude of motion across the motion direction axes [x, y ,z]
-position_goal = [{{NUM: 0.0–0.0}}, {{NUM: 0.0–0.0}}, {{NUM: 0.0–0.0}}]
+position_goal = [{{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}]
 # explicitly state the forces along the [x, y, z] axes
-force = [{{NUM: 0.0–0.0}}, {{NUM: 0.0–0.0}}, {{NUM: 0.0–0.0}}]
+force = [{{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}]
 # explicitly state the grasping force, which must be positive
-grasp_force = {{PNUM: 0.0–0.0}}
+grasp_force = {{PNUM: 0.0}}
 # explicitly state the task duration, which must be positive
 duration = {{PNUM: 0.0}}
 ```
@@ -125,4 +127,5 @@ class PromptForceThinker(llm_prompt.LLMPrompt):
       force_plan = {x.split("=")[0].strip(): ast.literal_eval(x.split("=")[1]) for x in force_plan_string}
       return force_plan
     except Exception as _:  # pylint: disable=broad-exception-caught
+      print("Error processing response from thinker: ", _)
       return response
