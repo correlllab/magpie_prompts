@@ -48,6 +48,64 @@ def _open_ai_call_with_retry(
       time.sleep(5)
   return completion
 
+def openai_encode_image(image):
+    '''
+    @param image PIL image to convet to a base64 string for OpenAI API.
+    '''
+    import base64
+    import io
+    buffer = io.BytesIO()
+    img = image.save(buffer, format="JPEG") # image is PIL image
+    return base64.b64encode(buffer.getvalue()).decode("utf-8")
+
+def create_image_message(text, image, messages=[], model_type="gemini"):
+    '''
+    @param text (str): text to be sent to the model
+    @param image (PIL.Image): image to be sent to the model
+    '''
+    if model_type == "gemini":
+        messages.append(text)
+        messages.append(image)
+    elif model_type == "openai":
+        message = {
+            "role": "user",
+            "content": [
+                {"type": "input_text", "text": text},
+                {
+                    "type": "input_image",
+                    "image_url": f"data:image/jpeg;base64,{openai_encode_image(image)}",
+                }
+            ]
+        }
+        messages.append(message)
+    return messages
+
+def send_message(client, model, messages=[], model_type="gemini"):
+    '''
+    Sends a list of messages to the specified client and model.
+
+    @param client: The initialized OpenAI or Gemini client.
+    @param model (str): The model ID to use.
+    @param messages (list): A list of message dictionaries (for OpenAI) or content parts (for Gemini).
+    @param model_type (str): Either "openai" or "gemini".
+    @return: The response from the model.
+    '''
+    text = ""
+    if model_type == "gemini":
+        response = client.models.generate_content(
+            model=model,
+            contents=messages,
+        )
+        text = response.text
+    elif model_type == "openai":
+        response = client.responses.create(
+            model=model,
+            input=messages,
+        )
+        text = response.output_text
+    else:
+        raise ValueError("Invalid model type. Choose either 'gemini' or 'openai'.")
+    return text
 
 class Conversation:
   """Manages the state of a conversation with a language model."""
