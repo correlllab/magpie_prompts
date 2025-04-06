@@ -69,85 +69,10 @@ Rules:
 """
 
 prompt_motion_coder = """
-We have a description of a gripper's motion and force sensing and we want you to turn that into the corresponding program with following class functions of the gripper:
-The gripper has a measurable max force of 16N and min force of 0.15N, a maximum aperture of 105mm and a minimum aperture of 1mm.
-
-```
-def get_aperture(finger='both')
-```
-finger: which finger to get the aperture in mm, of, either 'left', 'right', or 'both'. If 'left' or 'right', returns aperture, or distance, from finger to center. If 'both', returns aperture between fingers.
-
-```
-def set_goal_aperture(aperture, finger='both', record_load=False)
-```
-aperture: the aperture to set the finger(s) to (in mm)
-finger: which finger to set the aperture in mm, of, either 'left', 'right', or 'both'.
-record_load: whether to record the load at the goal aperture. If true, will return array of (pos, load) tuples
-This function will move the finger(s) to the specified goal aperture, and is used to close and open the gripper.
-Returns a position-load data array of shape (2, n) --> [[positions], [loads]], average force, and max force after the motion.
-
-```
-def set_compliance(margin, flexibility, finger='both')
-```
-margin: the allowable error between the goal and present position (in mm)
-flexibility: the compliance slope of motor torque (value 0-7, higher is more flexible) until it reaches the compliance margin
-finger: which finger to set compliance for, either 'left', 'right', or 'both'
-
-```
-def set_force(force, finger='both')
-```
-force: the maximum force the finger is allowed to apply at contact with an object(in N), ranging from (0.1 to 16 N)
-finger: which finger to set compliance for, either 'left', 'right', or 'both'
-
-```
-def deligrasp(goal_aperture, initial_force, additional_closure, additional_force, complete_grasp)
-```
-goal_aperture: the goal aperture to grasp the object (in mm)
-initial_force: the initial force to apply to the object (in N)
-additional_closure: the additional aperture to close if the gripper slips (in mm)
-additional_force: the additional force to apply if the gripper slips (in N)
-complete_grasp: whether the grasp is complete or incomplete (True or False)
-This function will close the gripper to the goal aperture, apply the initial force, and adjust the force if the gripper slips. If the grasp is incomplete, the gripper will open after the slip check.
-
-```
-def poke(direction, speed, aperture)
-```
-direction: 'left' or 'right' to poke the left or right finger
-speed of finger in m/s
-aperture: distance to poke in mm (of one finger, not both)
-
+We have a description of a robot's motion and force sensing and we want you to turn that into the corresponding program with following class functions of the robot:
 
 Example answer code:
 ```
-from magpie_control.gripper import Gripper # must import the gripper class
-from magpie_control.ur5 import UR5_Interface # must import the robot interface
-G = Gripper() # create a gripper object
-import numpy as np  # import numpy because we are using it below
-
-new_task = {CHOICE: [True, False]} # Whether or not the task is new
-# Reset parameters to default since this is a new, delicate grasp to avoid crushing the raspberry.
-if new_task:
-    G.reset_parameters()
-
-# [REASONING] 
-goal_aperture = {PNUM: goal_aperture}
-complete_grasp = {CHOICE: [True, False]} 
-# Initial force. Convert mass (g) to (kg). The default value of object weight / friction coefficient.
-initial_force = {PNUM: {CHOICE: [({PNUM: mass} * 9.81) / ({PNUM: mu} * 1000), {PNUM: different_inital_force}] }}}
-# [REASONING for initial force choice]
-additional_closure = {PNUM: additional_closure} 
-# Additional force increase. The default value is the product of the object spring constant and the additional_closure, with a dampening constant 0.1.
-additional_force = np.max([0.01, additional_closure * {PNUM: spring_constant} * 0.0001])
-
-# Move quickly (without recording load) to a safe aperture that is wider than the goal aperture
-G.set_goal_aperture(goal_aperture + additional_closure * 2, finger='both', record_load=False)
-
-# [REASONING]
-# [PREDICTION]
-G.set_compliance(1, 3, finger='both')
-G.set_force(initial_force, 'both')
-
-G.deligrasp(goal_aperture, initial_force, additional_closure, additional_force, complete=complete_grasp, debug=True)
 ```
 
 Remember:
