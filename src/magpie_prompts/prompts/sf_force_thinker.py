@@ -20,7 +20,7 @@ The green axis pointing to the right of the image is the positive X-axis, corres
 The blue axis pointing up the image is the negative Y-axis, corresponding {{DESCRIPTION: the potential motion or lack thereof of the object in the image to accomplish the task}}.
 The red dot pointing into the image is the positive Z-axis, corresponding {{DESCRIPTION: the potential motion or lack thereof of the object in the image to accomplish the task}}.
 
-Motion Required:
+Position Motion Required:
 X-axis: {{DESCRIPTION: describe if movement is required and in which direction along the labeled axis}}.
 
 Y-axis: {{DESCRIPTION: describe if movement is required and in which direction along the labeled axis}}.
@@ -32,7 +32,7 @@ To estimate the forces required to accomplish {task} while grasping the {obj}, w
 - {{DESCRIPTION: describe the forces required to accomplish the task for a specific subcomponent or subtask, including any resistances or forces acting on the object}}.
 - ... {{DESCRIPTION: continue as many descriptions as needed}}
 
-Qualitative Force Estimation:
+Force Motion Estimation:
 X-axis: {{DESCRIPTION: estimated force range and justification based on friction, mass, resistance}}.
 
 Y-axis: {{DESCRIPTION: estimated force range and justification based on friction, mass, resistance}}.
@@ -41,7 +41,7 @@ Z-axis: {{DESCRIPTION: estimated force range and justification based on friction
 
 Grasping force: {{DESCRIPTION: estimated force range and justification based on friction, mass, resistance}}.
 
-Detailed Force Estimation Reasoning:
+Detailed Force Reasoning:
 - Object Properties: {{DESCRIPTION: estimated mass, material, stiffness, friction coefficient, if object is articulated, do the same reasoning for whatever joint / degree of freedom enables motion}}.
 - Environmental Factors: {{DESCRIPTION: consideration of various environmental factors in task like gravity, surface friction, damping, hinge resistance}}.
 - Contact Types: {{DESCRIPTION: consideration of various contacts such as edge contact, maintaining surface contact, maintaining a pinch grasp, etc.}}.
@@ -55,24 +55,24 @@ Physical Model (if applicable):
   "Torque τ = I * α, with I = 1/3 M L² for rectangular lid rotating on hinge..."
   "Force F = τ / r, where r is distance from hinge to contact."
 
-Final Computed Estimated Forces:
-X-axis: {{NUM: 0.0–0.0] N  
-Y-axis: {{NUM: 0.0–0.0] N  
-Z-axis: {{NUM: 0.0–0.0] N  
-Grasp: {{PNUM: 0.0–0.0] N  
+Final Computed Forces:
+X-axis: {{NUM: 0.0–0.0}} N  
+Y-axis: {{NUM: 0.0–0.0}} N  
+Z-axis: {{NUM: 0.0–0.0}} N  
+Grasp: {{PNUM: 0.0–0.0}} N  
 
 Python Code:
 ```python
 # describe the motion along the [x, y, z] axes as either positive, negative, or no motion
-motion_direction = [{{CHOICE: [-1, 0, 1]], {{CHOICE: [-1, 0, 1]], {{CHOICE: [-1, 0, 1]]]
+position_direction = [{{CHOICE: [-1, 0, 1}}, {{CHOICE: [-1, 0, 1}}, {{CHOICE: [-1, 0, 1}}]
 # resolve the magnitude of motion across the motion direction axes [x, y ,z]
-motion_goal = [{{NUM: 0.0–0.0], {{NUM: 0.0–0.0], {{NUM: 0.0–0.0]]
+position_goal = [{{NUM: 0.0–0.0}}, {{NUM: 0.0–0.0}}, {{NUM: 0.0–0.0}}]
 # explicitly state the forces along the [x, y, z] axes
-force = [{{NUM: 0.0–0.0], {{NUM: 0.0–0.0], {{NUM: 0.0–0.0]]
+force = [{{NUM: 0.0–0.0}}, {{NUM: 0.0–0.0}}, {{NUM: 0.0–0.0}}]
 # explicitly state the grasping force, which must be positive
-grasp_force = {{PNUM: 0.0–0.0]
+grasp_force = {{PNUM: 0.0–0.0}}
 # explicitly state the task duration, which must be positive
-duration = {{PNUM: 0.0]
+duration = {{PNUM: 0.0}}
 ```
 
 [end of motion plan]
