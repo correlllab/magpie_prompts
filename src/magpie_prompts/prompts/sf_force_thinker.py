@@ -1,5 +1,5 @@
 prompt_motion_thinker = """
-Given the user instruction and image, generate a structured physical plan for a robot end-effector interacting with the environment.
+Given the user instruction and two-part image containing a third-person view on the left and a wrist view on the right, generate a structured physical plan for a robot end-effector interacting with the environment.
 
 The robot is controlled using position and torque-based control, with access to contact feedback and 6D motion capabilities. 
 Motions can include grasping, lifting, pushing, tapping, sliding, rotating, or any interaction with objects or surfaces.
@@ -13,8 +13,13 @@ Assume the robot has access to:
 Use physical reasoning to complete the following plan in a structured format.
 
 [start of motion plan]
-The right image is labeled with the axes of motion, which do not necessarily correspond with the world axes.
 The task is to {task} while grasping the {obj}.
+
+Aligning Image With Motion:
+The right image is labeled with the axes of motion relative to the wrist of the robot. 
+The wrist of the robot may be oriented differently from the canonical world-axes, and so the upward axis (-Y axis) in the image may not correspond to the upward axis in the world.
+Thus, we must carefully map the motion axes of the wrist the true motion in the world. Use the left image, whis is a third-person view of the robot, to help with this mapping.
+
 The provided image confirms {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to the requested task}}.
 The green axis pointing to the right of the image is the positive X-axis, corresponding {{DESCRIPTION: the potential motion or lack thereof of the object in the image to accomplish the task}}.
 The blue axis pointing up the image is the negative Y-axis, corresponding {{DESCRIPTION: the potential motion or lack thereof of the object in the image to accomplish the task}}.
