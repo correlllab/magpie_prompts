@@ -1,19 +1,25 @@
 prompt_motion_reflection = """
 The robot has executed the initially provided motion plan, and now we need to analyze the ground-truth positions and forces during this interaction.
 The feedback is as follows: 
-- a two-part image containing a third-person view on the left and a wrist view on the right
+- a three-part image containing a wrist view with world-frame labeled axes on the left, third-person view in the middle, and a wrist view with wrist-frame labeled axes on the right
 - the change in position relative to the wrist
 - the change in position relative to the robot base, or the world frame
 - The duration of the task
 - A summary of the wrist wrenches downsampled to 2Hz
 - A summary of the gripper contact forces downsampled to 2Hz
 
+Remember that the force feedback is inverted from the applied forces, as the F/T sensor measures environmental forces reacting to the robot's motion.
+As in, the robot applying a motion and force along a positive axis will result in a negative force reading from the F/T sensor, and vice-versa.
+Remember that as the robot moves, the wrist-frame axes will change from the initial wrist-frame axes. 
+Refer to the world-frame axes labeled on the left of the three-part images to help map the ground-truth motion history along original wrist-frame axes in the first three-part image.
+
 Here are the results of the robot's interaction with the environment. 
+{results}
 
 [beginning of reflection]
 Reflection on Task Completion:
-- The provided two-part image and change in position confirms the robot {{CHOICE: [was, was not}} able to accomplish the task of {task} while grasping the {obj}.
-- This is based on the following observations: {{DESCRIPTION: describe the visual and position observations that confirm or deny task completion}}.
+- The provided three-part image and change in position confirms the robot {{CHOICE: [was, was not}} able to accomplish the task of {task} while grasping the {obj}.
+- This is because, based on the following observations: {{DESCRIPTION: describe the visual (labeled axes in wrist and base frames) and position observations that explain and confirm or deny task completion}}.
 - If the task was incomplete, describe the task state: {{DESCRIPTION: describe the task state, partially completed, bad position, or complete failure, utilizing the provided details}}.
 - The estimated task duration was {{CHOICE: [sufficient, insufficient}} with the actual task duration.
 
@@ -43,7 +49,7 @@ Proposed Changes to Motion Plan:
 Python Code with Updated Motion Plan after Reflection:
 ```python
 # describe whether or not to reset the task completely and whether it was a complete failure (False) or complete success (True). In the case of failure, the motion plan described will be executed only after the reset
-reset_task = [{{CHOICE: [True, False]}}, {{CHOICE: [True, False]}}]
+reset_task_info = [{{CHOICE: [True, False]}}, {{CHOICE: [True, False]}}]
 # describe the motion along the [x, y, z] axes as either positive, negative, or no motion
 position_direction = [{{CHOICE: [-1, 0, 1}}, {{CHOICE: [-1, 0, 1}}, {{CHOICE: [-1, 0, 1}}]
 # resolve the magnitude of motion across the motion direction axes [x, y ,z]
@@ -56,8 +62,6 @@ grasp_force = {{PNUM: 0.0}}
 duration = {{PNUM: 0.0}}
 ```
 [end of reflection]
-
-
 
 Rules:
 1. Replace all {{DESCRIPTION: ...}}, {{PNUM: ...}}, {{NUM: ...}}, and {{CHOICE}} entries with specific values or statements.
