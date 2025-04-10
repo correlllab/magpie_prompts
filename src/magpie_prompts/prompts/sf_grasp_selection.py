@@ -1,5 +1,5 @@
 grasp_prompt = '''
-Help assist with selecting a grasp for a given object and/or task.
+Help assist with selecting a robotic grasp for a given object and/or task.
 
 You may receive the following information:
 1) A user query about an object and/or task
