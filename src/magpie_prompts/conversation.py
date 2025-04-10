@@ -58,24 +58,28 @@ def openai_encode_image(image):
     img = image.save(buffer, format="JPEG") # image is PIL image
     return base64.b64encode(buffer.getvalue()).decode("utf-8")
 
-def create_image_message(text, image, messages=[], model_type="gemini"):
+def build_messages(text=None, image=None, messages=[], model_type="gemini"):
     '''
     @param text (str): text to be sent to the model
     @param image (PIL.Image): image to be sent to the model
     '''
     if model_type == "gemini":
-        messages.append(text)
-        messages.append(image)
+        if text is not None:
+          messages.append(text)
+        if image is not None:
+          messages.append(image)
     elif model_type == "openai":
+        content = []
+        if text is not None:
+            content.append({"type": "input_text", "text": text})
+        if image is not None:
+            content.append({
+                "type": "input_image",
+                "image_url": f"data:image/jpeg;base64,{openai_encode_image(image)}",
+            })
         message = {
             "role": "user",
-            "content": [
-                {"type": "input_text", "text": text},
-                {
-                    "type": "input_image",
-                    "image_url": f"data:image/jpeg;base64,{openai_encode_image(image)}",
-                }
-            ]
+            "content": content
         }
         messages.append(message)
     return messages
