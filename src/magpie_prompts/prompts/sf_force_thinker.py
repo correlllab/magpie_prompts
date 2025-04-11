@@ -77,8 +77,8 @@ Python Code with Final Motion Plan:
 position_direction = [{{CHOICE: [-1, 0, 1}}, {{CHOICE: [-1, 0, 1}}, {{CHOICE: [-1, 0, 1}}]
 # resolve the magnitude of motion across the motion direction axes [x, y ,z]
 position_goal = [{{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}]
-# explicitly state the forces along the [x, y, z] axes
-force = [{{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}]
+# explicitly state the forces and torques along the [x, y, z, rx, ry, rz] axes
+wrench= [{{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}]
 # explicitly state the grasping force, which must be positive
 grasp_force = {{PNUM: 0.0}}
 # explicitly state the task duration, which must be positive
