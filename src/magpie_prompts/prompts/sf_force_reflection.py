@@ -8,32 +8,49 @@ The feedback is as follows:
 - A summary of the wrist wrenches downsampled to 2Hz
 - A summary of the gripper contact forces downsampled to 2Hz
 
-Remember that the force feedback is inverted from the applied forces, as the F/T sensor measures environmental forces reacting to the robot's motion.
-As in, the robot applying a motion and force along a positive axis will result in a negative force reading from the F/T sensor, and vice-versa.
-Remember that as the robot moves, the wrist-frame axes will change from the initial wrist-frame axes. 
-Refer to the world-frame axes labeled on the left of the three-part images to help map the ground-truth motion history along original wrist-frame axes in the first three-part image.
+The goal is to analyze the robot's performance and modify the motion plan if necessary or to improve task performance:
+- You should consider the visual feedback from the three-part image, the change in position, and the forces to determine if the task was successful.
+- Remember that the force feedback is inverted from the applied forces, as the F/T sensor measures environmental forces reacting to the robot's motion.
+- As in, the robot applying a motion and force along a positive axis will result in a negative force reading from the F/T sensor, and vice-versa.
+- Remember that as the robot moves, the labeled wrist-frame does not change, but the world-frame does. This is because motion is relative to the robot's wrist-frame, which is fixed to the robot, while the world-frame is fixed to the environment.
+- Thus, refer to both the prior and current three-part images, which show world-frame axes before and after the robot's motion.
+- Refer to the world-frame axes labeled on the prior and current image to help map the ground-truth motion history in the world frame.
+- Then, refer to the wrist-frame axes labeled on the prior image to map the ground-truth motion history from the world frame to wrist motion relative to the prior wrist-frame.
+- Note that some positional changes may be due to slip in the gripper, which can be observed visually and in the contact force history, and can be counteracted by increasing the grasping force. 
+- However, make sure to not increase the grasping force too much, as this can cause damage to the object or gripper.
+- After doing this analysis, you should be able to determine if the robot was able to accomplish the task of {task} while grasping the {obj} via close analysis of the provided feedback.
+- If the robot and object moved in the correct direction and the forces relative to the prior wrist-frame were sufficient with the task, then the task was successful.
+- You may not have had all the information about the scene and object for the initial plan. If possible, use the feedback and experience to better understand the physical properties of the object and environment.
+- Modify the required forces, torques, positions, and task duration to improve the robot's performance. If it is safe and appropriate to do so, try to speed up the task.  
 
 Here are the results of the robot's interaction with the environment. 
 {results}
 
 [beginning of reflection]
-Reflection on Task Completion:
-- The provided three-part image and change in position confirms the robot {{CHOICE: [was, was not}} able to accomplish the task of {task} while grasping the {obj}.
+Reflection on Task:
+- The change in the world X-axis position corresponds to the prior wrist frame motion as such {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to map the world frame motion to the prior wrist frame's motion axes }}.
+- The change in the world Y-axis position corresponds to the prior wrist frame motion as such {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to map the world frame motion to the prior wrist frame's motion axes }}.
+- The change in the world Z-axis position corresponds to the prior wrist frame motion as such {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to map the world frame motion to the prior wrist frame's motion axes }}.
+- The change in position relative to the wrist was {{CHOICE: [sufficient, insufficient]}} with the estimated position because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+- The change in the prior wrist X-axis position was {{CHOICE: [sufficient, insufficient]}} with the estimated position because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+- The change in the prior wrist Y-axis position was {{CHOICE: [sufficient, insufficient]}} with the estimated position because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+- The change in the prior wrist Z-axis position was {{CHOICE: [sufficient, insufficient]}} with the estimated position because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+- The robot's wrist wrenches and gripper contact forces were {{CHOICE: [sufficient, insufficient]}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that confirm to reach this conclusion.}}
+- The robot's wrist linear X-axis force was {{CHOICE: [sufficient, insufficient]}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+- The robot's wrist linear Y-axis force was {{CHOICE: [sufficient, insufficient]}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+- The robot's wrist linear Z-axis force was {{CHOICE: [sufficient, insufficient]}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+- The robot's wrist angular X-axis torque was {{CHOICE: [sufficient, insufficient]}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+- The robot's wrist angular Y-axis torque was {{CHOICE: [sufficient, insufficient]}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+- The robot's wrist angular Z-axis torque was {{CHOICE: [sufficient, insufficient]}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+- The robot's grasping force was {{CHOICE: [sufficient, insufficient}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+- Based on the provided feedback, the object and surface properties are {{CHOICE: [consistent, inconsistent]}} with the estimated properties because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+- Thus, the object properties are {{DESCRIPTION: explicitly describe the object properties, such as mass, friction, and stiffness}}.
+- Thus, the surface properties are {{DESCRIPTION: explicitly describe the surface properties, such as mass, friction, and stiffness}}.
+- The provided three-part image and change in position confirms the robot {{CHOICE: [was, was not]}} able to accomplish the task of {task} while grasping the {obj}.
 - This is because, based on the following observations: {{DESCRIPTION: describe the visual (labeled axes in wrist and base frames) and position observations that explain and confirm or deny task completion}}.
 - If the task was incomplete, describe the task state: {{DESCRIPTION: describe the task state, partially completed, bad position, or complete failure, utilizing the provided details}}.
-- The estimated task duration was {{CHOICE: [sufficient, insufficient}} with the actual task duration.
-
-Reflection on Motion:
-- The provided two-part image and change in position confirms the robot {{CHOICE: [was, was not}} able to exert the estimated forces or move to the correct positions required to accomplish the task of {task} while grasping the {obj}.
-- The change in position relative to the wrist was {{CHOICE: [consistent, inconsistent}} with the estimated position because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-- The change in the wrist X-axis position was {{CHOICE: [consistent, inconsistent}} with the estimated position because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-- The change in the wrist Y-axis position was {{CHOICE: [consistent, inconsistent}} with the estimated position because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-- The change in the wrist Z-axis position was {{CHOICE: [consistent, inconsistent}} with the estimated position because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-- The robot's wrist wrenches and gripper contact forces were {{CHOICE: [consistent, inconsistent}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that confirm to reach this conclusion.}}
-- The robot's wrist X-axis force was {{CHOICE: [consistent, inconsistent}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-- The robot's wrist Y-axis force was {{CHOICE: [consistent, inconsistent}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-- The robot's wrist Z-axis force was {{CHOICE: [consistent, inconsistent}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-- The robot's grasping force was {{CHOICE: [consistent, inconsistent}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+- The estimated task duration was {{CHOICE: [sufficient, insufficient]}} with the actual task duration.
+- The provided three-part image and change in position confirms the robot {{CHOICE: [was, was not]}} able to exert the estimated forces or move to the correct positions required to accomplish the task of {task} while grasping the {obj}.
 
 Proposed Changes to Motion Plan:
 - The task {{CHOICE: [is, is not]}} either fully completed or failed beyond recovery, so the task {{CHOICE: [should, should not}} be reset to try again.
@@ -41,21 +58,25 @@ Proposed Changes to Motion Plan:
 - The wrist X-axis position should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
 - The wrist Y-axis position should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
 - The wrist Z-axis position should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
-- The wrist X-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
-- The wrist Y-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
-- The wrist Z-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
+- The wrist linear X-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
+- The wrist linear Y-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
+- The wrist linear Z-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
+- The wrist angular X-axis torque should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
+- The wrist angular Y-axis torque should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
+- The wrist angular Z-axis torque should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
 - The grasping force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
+- The task duration should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
 
 Python Code with Updated Motion Plan after Reflection:
 ```python
-# describe whether or not to reset the task completely and whether it was a complete failure (False) or complete success (True). In the case of failure, the motion plan described will be executed only after the reset
+# describe whether or not to reset the task (True/False) completely and whether it was a complete failure (False) or complete success (True). In the case of failure, the motion plan described will be executed only after the reset
 reset_task_info = [{{CHOICE: [True, False]}}, {{CHOICE: [True, False]}}]
 # describe the motion along the [x, y, z] axes as either positive, negative, or no motion
 position_direction = [{{CHOICE: [-1, 0, 1}}, {{CHOICE: [-1, 0, 1}}, {{CHOICE: [-1, 0, 1}}]
 # resolve the magnitude of motion across the motion direction axes [x, y ,z]
 position_goal = [{{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}]
-# explicitly state the forces along the [x, y, z] axes
-force = [{{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}]
+# explicitly state the forces and torques along the [x, y, z, rx, ry, rz] axes
+wrench= [{{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}]
 # explicitly state the grasping force, which must be positive
 grasp_force = {{PNUM: 0.0}}
 # explicitly state the task duration, which must be positive
