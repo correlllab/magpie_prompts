@@ -49,12 +49,12 @@ Reflection on Task:
 - The provided three-part image and change in position confirms the robot {{CHOICE: [was, was not]}} able to accomplish the task of {task} while grasping the {obj}.
 - This is because, based on the following observations: {{DESCRIPTION: describe the visual (labeled axes in wrist and base frames) and position observations that explain and confirm or deny task completion}}.
 - If the task was incomplete, describe the task state: {{DESCRIPTION: describe the task state, partially completed, bad position, or complete failure, utilizing the provided details}}.
-- The estimated task duration was {{CHOICE: [sufficient, insufficient]}} with the actual task duration.
+- The estimated task duration was {{CHOICE: [sufficient, insufficient]}} to complete the desired task
 - The provided three-part image and change in position confirms the robot {{CHOICE: [was, was not]}} able to exert the estimated forces or move to the correct positions required to accomplish the task of {task} while grasping the {obj}.
 
 Proposed Changes to Motion Plan:
-- The task {{CHOICE: [is, is not]}} either fully completed or failed beyond recovery, so the task {{CHOICE: [should, should not}} be reset to try again.
-- The plan {{CHOICE: [is, is not]}} is partially incorrect or incomplete, thus the robot {{CHOICE: [should, should not}} change the motion plan by {{DESCRIPTION: describe the changes to the motion plan, such as changing the direction of motion or adjusting the forces}}.
+- The task {{CHOICE: [is, is not]}} either fully completed or failed beyond recovery, so the task {{CHOICE: [should, should not]}} be reset to try again.
+- The plan {{CHOICE: [is, is not]}} is partially incorrect or incomplete, thus the robot {{CHOICE: [should, should not]}} change the motion plan by {{DESCRIPTION: describe the changes to the motion plan, such as changing the direction of motion or adjusting the forces}}.
 - The task duration should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTION: brief concluding thought based on prior reasoning on reached position and forces applied}}
 - The overall force and torque magnitudes should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTION: brief concluding thought based on prior reasoning related to task completion given the motion plan}}
 - The overall magnitude of motion to specified goal positions should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTION: brief concluding thought based on prior reasoning related to task completion given the motion plan}}
@@ -94,6 +94,7 @@ Rules:
 5. Use common sense where exact properties are ambiguous, and explain assumptions.
 6. Do not include any sections outside the start/end blocks or add non-specified bullet points.
 7. Make sure to provide the final python code for each requested force in a code block.
+8. Make sure to update and change the final motion plan according to the proposed changes in the reflection.
 """
 
 import re

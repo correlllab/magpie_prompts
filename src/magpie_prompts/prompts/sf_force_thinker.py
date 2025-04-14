@@ -22,7 +22,7 @@ The task is to {task} while grasping the {obj}.
 Aligning Images With Wrist Motion:
 The provided images in the three-part image confirm {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to the requested task}}.
 The green axis representing the positive X-axis along the wrist corresponds to {{DESCRIPTION: the world-frame axes and motion, as described in the left and middle images, that best match the task}}.
-The blue axis representing negative Y-axis along the wrist corresponds to {{DESCRIPTION: the world-frame axes and motion, as described in the left and middle images, that best match the task}}.
+The blue axis representing positive Y-axis along the wrist corresponds to {{DESCRIPTION: the world-frame axes and motion, as described in the left and middle images, that best match the task}}.
 The red dot representing the positive Z-axis (into the page) along the wrist corresponds {{DESCRIPTION: the world-frame axes and motion, as described in the left and middle images, that best match the task}}.}}
 Thus, in order to complete the task, the required linear wrist motion along the green axis representing the positive X-axis is {{DESCRIPTION: the potential linear motion or lack thereof of the object in the image to accomplish the task}}.
 Thus, in order to complete the task, the required linear wrist motion along the blue axis representing positive Y-axis is {{DESCRIPTION: the potential linear motion or lack thereof of the object in the image to accomplish the task}}.
