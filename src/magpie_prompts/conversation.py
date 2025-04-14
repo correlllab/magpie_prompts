@@ -71,14 +71,17 @@ def build_messages(text=None, image=None, messages=[], model_type="gemini", role
     elif model_type == "openai":
         content = []
         if text is not None:
-            content.append({"type": "input_text", "text": text})
+            content_type = "input_text"
+            if role != "user":
+               content_type = "output_text"
+            content.append({"type": content_type, "text": text})
         if image is not None:
             content.append({
                 "type": "input_image",
                 "image_url": f"data:image/jpeg;base64,{openai_encode_image(image)}",
             })
         message = {
-            "role": {role},
+            "role": role,
             "content": content
         }
         messages.append(message)

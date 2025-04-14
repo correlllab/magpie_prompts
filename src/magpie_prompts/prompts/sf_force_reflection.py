@@ -10,12 +10,12 @@ The feedback is as follows:
 
 The goal is to analyze the robot's performance and modify the motion plan if necessary or to improve task performance:
 - You should consider the visual feedback from the three-part image, the change in position, and the forces to determine if the task was successful.
-- Remember that the force feedback is inverted from the applied forces, as the F/T sensor measures environmental forces reacting to the robot's motion.
-- As in, the robot applying a motion and force along a positive axis will result in a negative force reading from the F/T sensor, and vice-versa.
 - Remember that as the robot moves, the labeled wrist-frame does not change, but the world-frame does. This is because motion is relative to the robot's wrist-frame, which is fixed to the robot, while the world-frame is fixed to the environment.
 - Thus, refer to both the prior and current three-part images, which show world-frame axes before and after the robot's motion.
+- A potential cause of inconsistency with the motion plan and task failure is that the initial motion plan was incorrect, particularly if the robot was not able to move in the desired direction.
 - Refer to the world-frame axes labeled on the prior and current image to help map the ground-truth motion history in the world frame.
-- Then, refer to the wrist-frame axes labeled on the prior image to map the ground-truth motion history from the world frame to wrist motion relative to the prior wrist-frame.
+- Then, refer to the wrist-frame axes labeled on the prior image to map the ground-truth motion history from the world frame to ground-truth wrist motion relative to the prior wrist-frame.
+- If this ground-truth motion history does not match the desired motion in the task, then the axes of motion may be incorrect.
 - Note that some positional changes may be due to slip in the gripper, which can be observed visually and in the contact force history, and can be counteracted by increasing the grasping force. 
 - However, make sure to not increase the grasping force too much, as this can cause damage to the object or gripper.
 - After doing this analysis, you should be able to determine if the robot was able to accomplish the task of {task} while grasping the {obj} via close analysis of the provided feedback.
@@ -31,11 +31,9 @@ Reflection on Task:
 - The change in the world X-axis position corresponds to the prior wrist frame motion as such {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to map the world frame motion to the prior wrist frame's motion axes }}.
 - The change in the world Y-axis position corresponds to the prior wrist frame motion as such {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to map the world frame motion to the prior wrist frame's motion axes }}.
 - The change in the world Z-axis position corresponds to the prior wrist frame motion as such {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to map the world frame motion to the prior wrist frame's motion axes }}.
-- The change in position relative to the wrist was {{CHOICE: [sufficient, insufficient]}} with the estimated position because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
 - The change in the prior wrist X-axis position was {{CHOICE: [sufficient, insufficient]}} with the estimated position because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
 - The change in the prior wrist Y-axis position was {{CHOICE: [sufficient, insufficient]}} with the estimated position because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
 - The change in the prior wrist Z-axis position was {{CHOICE: [sufficient, insufficient]}} with the estimated position because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-- The robot's wrist wrenches and gripper contact forces were {{CHOICE: [sufficient, insufficient]}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that confirm to reach this conclusion.}}
 - The robot's wrist linear X-axis force was {{CHOICE: [sufficient, insufficient]}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
 - The robot's wrist linear Y-axis force was {{CHOICE: [sufficient, insufficient]}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
 - The robot's wrist linear Z-axis force was {{CHOICE: [sufficient, insufficient]}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
