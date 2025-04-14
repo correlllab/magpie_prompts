@@ -55,17 +55,19 @@ Reflection on Task:
 Proposed Changes to Motion Plan:
 - The task {{CHOICE: [is, is not]}} either fully completed or failed beyond recovery, so the task {{CHOICE: [should, should not}} be reset to try again.
 - The plan {{CHOICE: [is, is not]}} is partially incorrect or incomplete, thus the robot {{CHOICE: [should, should not}} change the motion plan by {{DESCRIPTION: describe the changes to the motion plan, such as changing the direction of motion or adjusting the forces}}.
-- The wrist X-axis position should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
-- The wrist Y-axis position should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
-- The wrist Z-axis position should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
-- The wrist linear X-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
-- The wrist linear Y-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
-- The wrist linear Z-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
-- The wrist angular X-axis torque should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
-- The wrist angular Y-axis torque should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
-- The wrist angular Z-axis torque should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
-- The grasping force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
-- The task duration should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTIOn: brief concluding thought based on prior reasoning}}
+- The task duration should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTION: brief concluding thought based on prior reasoning on reached position and forces applied}}
+- The overall force and torque magnitudes should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTION: brief concluding thought based on prior reasoning related to task completion given the motion plan}}
+- The overall magnitude of motion to specified goal positions should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTION: brief concluding thought based on prior reasoning related to task completion given the motion plan}}
+- The wrist X-axis goal position should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
+- The wrist Y-axis goal position should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
+- The wrist Z-axis goal position should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
+- The wrist linear X-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
+- The wrist linear Y-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
+- The wrist linear Z-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
+- The wrist angular X-axis torque should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
+- The wrist angular Y-axis torque should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
+- The wrist angular Z-axis torque should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
+- The grasping force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM: 0.0}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
 
 Python Code with Updated Motion Plan after Reflection:
 ```python
