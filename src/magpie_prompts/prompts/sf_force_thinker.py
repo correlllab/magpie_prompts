@@ -121,28 +121,28 @@ Use physical reasoning to complete the following plan in a structured format. Us
 We want to reason about forces and torques relative to the wrist frame because that is the frame of reference for the F/T sensor.
 More importantly, as the wrist's end-effector is grasping the object, assuming no slip, the requisite applied forces and especially torques on the object to accomplish the task will be the same as the forces and torques on the wrist frame.
 
-[start of motion plan]
+[start of wrench plan]
 Aligning Image With Motion:
 The task is to {task} while grasping the {obj}.
-The world frame motion to accomplish this task is {world_motion} (x, y, z in meters) because {world_motion_description}.
-Using the robot pose data, this world motion resolves to the following positional motion along wrist frame: {wrist_motion}.
-This is because, in the right image with the labeled wrist axes, the center red dot going into the page representing the positive wrist Z-axis corresponds to forward motion from the wrist and camera. Based off knowledge of the task and motion in the world frame, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
-Then, the green axis in the right image representing the positive wrist X-axis does not have a strict correspondence. Based off knowledge of the task and motion in the world frame and the forward motion of the positive wrist Z-axis, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
-Finally, the blue axis in the right image representing positive wrist Y-axis does not have a strict correspondence. Based off knowledge of the task and motion in the world frame and the forward motion of the positive wrist Z-axis, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
-Thus, to accomplish the task in the wrist frame, the object must be moved {{DESCRIPTION: describe succinctly the motion required along which wrist axes of motion to accomplish the task}}.
+The world frame motion to accomplish this task is {world_motion_vector} (x, y, z in meters) because {world_motion_description}.
+Using the robot pose data, this world motion resolves to the following positional motion along wrist frame: {wrist_motion_vector}.
+In the right image with the labeled wrist axes, the center red dot into the page represents motion along the wrist Z-axis. That is why, based off knowledge of the task and motion in the world frame the the motion along the wrist Z-axis is {wrist_motion_vector[2]}, since {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
+Then, the green axis represents motion along the wrist's X-axis. That is why, based off knowledge of the task and motion in the world frame the the motion along the wrist X-axis is {wrist_motion_vector[0]}, since {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
+Finally, the blue axis represents motion along the wrist's Y-axis. That is why, based off knowledge of the task and motion in the world frame the the motion along the wrist Y-axis is {wrist_motion_vector[1]}, since {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
+Thus, to accomplish the task in the wrist frame, the object must be moved {{DESCRIPTION: describe the motion required along which wrist axes of motion to accomplish the task}}.
 
 Understanding Forces and Torques Required for Motion:
 To estimate the forces and torques required to accomplish {task} while grasping the {obj}, we must consider the following:
 - The relevant object is {{DESCRIPTION: describe the object and its properties}} has mass {{NUM: 0.0}} kg and, with the robot gripper, has a static friction coefficient of {{NUM: 0.0}}.
 - The surface of interaction is {{DESCRIPTION: describe the surface and its properties}} has a static friction coefficient of {{NUM: 0.0}} with the object.
 - Object Properties: {{DESCRIPTION: estimated mass, material, stiffness, friction coefficient, if object is articulated, do the same reasoning for whatever joint / degree of freedom enables motion}}.
-- Environmental Factors: {{DESCRIPTION: consideration of various environmental factors in task like gravity, surface friction, damping, hinge resistance}}.
+- Environmental Factors: {{DESCRIPTION: consideration of various environmental factors in task like gravity (and which wrist-axes gravity corresponds to), surface friction, damping, hinge resistance}}.
 - Contact Types: {{DESCRIPTION: consideration of various contacts such as edge contact, maintaining surface contact, maintaining a pinch grasp, etc.}}.
 - Motion Type: {{DESCRIPTION: consideration of forceful motion(s) involved in accomplishing task such as pushing forward while pressing down, rotating around hinge by pulling up and out, or sliding while maintaining contact}}.
 - Contact Considerations: {{DESCRIPTION: explicitly consider whether additional axes of force are required to maintain contact with the object, robot, and environmen and accomplish the motion goal}}.
-- Motion along axes: {{DESCRIPTION: e.g., the robot exerts motion in a “linear,” “rotational,” “some combination” fashion along the [x, y, z] axes}}.
+- Motion along axes: {{DESCRIPTION: e.g., the robot exerts motion in a “linear,” “rotational,” “some combination” fashion along the [x, y, z, rx, ry, rz] axes}}.
 
-Physical Model (if applicable):
+Physical Model Computations:
 - Relevant quantities and estimates: {{DESCRIPTION: include any relevant quantities and estimates used in the calculations}}.
 - Relevant equations: {{DESCRIPTION: include any relevant equations used in the calculations}}.
 - Relevant assumptions: {{DESCRIPTION: include any relevant assumptions made in the calculations}}.
@@ -162,26 +162,38 @@ Python Code with Final Motion Plan:
 ```python
 # explicitly state the forces along the [x, y, z] axes
 wrench_description = "{{DESCRIPTION: describe succinctly the forces and torques required along which wrist axes of motion to accomplish the task}}"
-# explicitly state the forces and torques along the [x, y, z, rx, ry, rz] axes
-wrench= [{{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}]
+# explicitly state the forces and torques along the [x, y, z, rx, ry, rz] axes with the correct signs for direction
+wrench = [{{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}]
 # explicitly state the grasping force, which must be positive
 grasp_force = {{PNUM: 0.0}}
 # explicitly state the task duration, which must be positive
 duration = {{PNUM: 0.0}}
 ```
 
-[end of motion plan]
+[end of wrench plan]
 
 Rules:
 1. Replace all {{DESCRIPTION: ...}}, {{PNUM: ...}}, {{NUM: ...}}, and {{CHOICE}} entries with specific values or statements.
 2. Use best physical reasoning based on known robot/environmental capabilities. Remember that the robot may have to exert forces in additional axes compared to the motion direction axes in order to maintain contacts between the object, robot, and environment.
-3. Always include motion for all three axes, even if it's "No motion required."
+3. Always include motion for all axes of motion, even if it's "No motion required."
 4. Keep the explanation concise but physically grounded. Prioritize interpretability and reproducibility.
 5. Use common sense where exact properties are ambiguous, and explain assumptions.
 6. Do not include any sections outside the start/end blocks or add non-specified bullet points.
 7. Make sure to provide the final python code for each requested force in a code block.
+8. Remember that position motion along one axis in the world frame is resolved to potentially multiple axes of motion in the wrist frame.
+9. Remember that the wrist frame and world frame are not aligned, and the axes of motion in the wrist frame may not correspond to the axes of motion in the world frame. It will be helpful to figure out what wrist-axes correspond to world-axes of up or down (Z), left or right (X), or backward and forward (Y) motion.
+10. Do not abbreviate the prompt when generating the response. Fully reproduce the template, but filled in with your reasoning.
+11. While it is fine to exert additional forces, relative ratios of wrist forces otherwise should match the relative ratios of the provided wrist motion vector. Specifically, if the motion vector is [0.1, 0.2, 0.3], the forces should be in the same ratio, e.g., [0.1, 0.2, 0.3] or [1.0, 2.0, 3.0] or [10.0, 20.0, 30.0]. The exact values are not important. This is because besides additional contact forces, similar ratios forces are required to accomplish the same ratios of motion.
+12. Remember that "downward" or "upward" or other similar terms in the world may not correspond to positive or negative motion in the wrist frame. The wrist frame may be rotated or flipped relative to the world frame. Refer to the right image, which features the labeled wrist axes with the arrow pointing in the direction of positive motion (thus, motion opposite the arrow is negative).
 """
-
+scrap = """
+This is because upward and positive or downward and negative motion along the world Z-axis corresponds to wrist-relative motion along {{DESCRIPTION: the wrist axes which align with the world Z-axis}}.
+This is because leftward and positive or rightward and negative motion along the world X-axis corresponds to wrist-relative motion along {{DESCRIPTION: the wrist axes which align with the world X-axis}}.
+This is because backward and positive or forward and negative motion along the world Y-axis corresponds to wrist-relative motion along {{DESCRIPTION: the wrist axes which align with the world Y-axis}}.
+In the right image with the labeled wrist axes, the center red dot represents (into the image and positive) or (out of the image and negative) motion along the wrist Z-axis. That is why, based off knowledge of the task and motion in the world frame the the motion along the wrist Z-axis is {wrist_motion_vector[2]}, since {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
+Then, the green axis represents (down in the image and positive) and (up the image and negative) motion along the wrist's X-axis. That is why, based off knowledge of the task and motion in the world frame the the motion along the wrist X-axis is {wrist_motion_vector[0]}, since {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
+Finally, the blue axis represents (left in the image and positive) and (right in the image and negative) motion along the wrist's Y-axis. That is why, based off knowledge of the task and motion in the world frame the the motion along the wrist Y-axis is {wrist_motion_vector[1]}, since {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
+"""
 import re
 import sys
 import ast
