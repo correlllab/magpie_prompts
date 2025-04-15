@@ -129,32 +129,10 @@ Using the robot pose data, this world motion resolves to the following positiona
 This is because, in the right image with the labeled wrist axes, the center red dot going into the page representing the positive wrist Z-axis corresponds to forward motion from the wrist and camera. Based off knowledge of the task and motion in the world frame, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
 Then, the green axis in the right image representing the positive wrist X-axis does not have a strict correspondence. Based off knowledge of the task and motion in the world frame and the forward motion of the positive wrist Z-axis, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
 Finally, the blue axis in the right image representing positive wrist Y-axis does not have a strict correspondence. Based off knowledge of the task and motion in the world frame and the forward motion of the positive wrist Z-axis, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
-To accomplish the task in the wrist frame, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
-Thus, in order to complete the task, the required linear wrist motion along the green axis representing the positive X-axis is {{DESCRIPTION: the potential linear motion or lack thereof of the object in the image to accomplish the task}}.
-Thus, in order to complete the task, the required linear wrist motion along the blue axis representing positive Y-axis is {{DESCRIPTION: the potential linear motion or lack thereof of the object in the image to accomplish the task}}.
-Thus, in order to complete the task, the required linear wrist motion along the red dot representing the positive Z-axis (into the page) is {{DESCRIPTION: the potential linear motion or lack thereof of the object in the image to accomplish the task}}.
-Thus, in order to complete the task, the required angular wrist motion about the green axis representing the positive X-axis is {{DESCRIPTION: the potential angular motion or lack thereof of the object in the image to accomplish the task}}.
-Thus, in order to complete the task, the required angular wrist motion about the blue axis representing positive Y-axis is {{DESCRIPTION: the potential angular motion or lack thereof of the object in the image to accomplish the task}}.
-Thus, in order to complete the task, the required angular wrist motion about the red dot representing the positive Z-axis (into the page) is {{DESCRIPTION: the potential angular motion or lack thereof of the object in the image to accomplish the task}}.
-Succinct motion plan: {{DESCRIPTION: describe succinctly the motion required along which wrist axes of motion}}.
+Thus, to accomplish the task in the wrist frame, the object must be moved {{DESCRIPTION: describe succinctly the motion required along which wrist axes of motion to accomplish the task}}.
 
-The right image is labeled with the axes of motion relative to the wrist of the robot. 
-The wrist of the robot may be oriented differently from the canonical world-axes, and so the upward axis (-Y axis) in the image may not correspond to the upward axis in the world.
-Thus, we must carefully map the motion axes of the wrist the true motion in the world. Use the left image, whis is a third-person view of the robot, to help with this mapping.
-
-The provided image confirms {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to the requested task}}.
-The green axis pointing to the right of the image is the positive X-axis, corresponding {{DESCRIPTION: the potential motion or lack thereof of the object in the image to accomplish the task}}.
-The blue axis pointing up the image is the negative Y-axis, corresponding {{DESCRIPTION: the potential motion or lack thereof of the object in the image to accomplish the task}}.
-The red dot pointing into the image is the positive Z-axis, corresponding {{DESCRIPTION: the potential motion or lack thereof of the object in the image to accomplish the task}}.
-
-Position Motion Required:
-X-axis: {{DESCRIPTION: describe if movement is required and in which direction along the labeled axis}}.
-
-Y-axis: {{DESCRIPTION: describe if movement is required and in which direction along the labeled axis}}.
-
-Z-axis: {{DESCRIPTION: describe if movement is required and in which direction along the labeled axis}}.
-
-To estimate the forces required to accomplish {task} while grasping the {obj}, we must consider the following:
+Understanding Forces and Torques Required for Motion:
+To estimate the forces and torques required to accomplish {task} while grasping the {obj}, we must consider the following:
 - The relevant object is {{DESCRIPTION: describe the object and its properties}} has mass {{NUM: 0.0}} kg and, with the robot gripper, has a static friction coefficient of {{NUM: 0.0}}.
 - The surface of interaction is {{DESCRIPTION: describe the surface and its properties}} has a static friction coefficient of {{NUM: 0.0}} with the object.
 - Object Properties: {{DESCRIPTION: estimated mass, material, stiffness, friction coefficient, if object is articulated, do the same reasoning for whatever joint / degree of freedom enables motion}}.
@@ -164,36 +142,28 @@ To estimate the forces required to accomplish {task} while grasping the {obj}, w
 - Contact Considerations: {{DESCRIPTION: explicitly consider whether additional axes of force are required to maintain contact with the object, robot, and environmen and accomplish the motion goal}}.
 - Motion along axes: {{DESCRIPTION: e.g., the robot exerts motion in a “linear,” “rotational,” “some combination” fashion along the [x, y, z] axes}}.
 
-Force Motion Estimation:
-X-axis: {{DESCRIPTION: estimated force range and justification based on friction, mass, resistance}}.
-
-Y-axis: {{DESCRIPTION: estimated force range and justification based on friction, mass, resistance}}.
-
-Z-axis: {{DESCRIPTION: estimated force range and justification based on friction, mass, resistance}}.
-
-Grasping force: {{DESCRIPTION: estimated force range and justification based on friction, mass, resistance}}.
-
 Physical Model (if applicable):
-- Use Newton’s laws, torque estimates, or friction models if relevant, showing your math or approximations clearly.
 - Relevant quantities and estimates: {{DESCRIPTION: include any relevant quantities and estimates used in the calculations}}.
 - Relevant equations: {{DESCRIPTION: include any relevant equations used in the calculations}}.
 - Relevant assumptions: {{DESCRIPTION: include any relevant assumptions made in the calculations}}.
 - Computations: {{DESCRIPTION: include in full detail any relevant calculations using the above information}}.
+- Force/torque motion computations with object of mass {{NUM: 0.0}} kg and static friction coefficient of {{NUM: 0.0}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the surface friction using appropriate formulae and quantities}}.
 
-Computed Forces with Estimate Ranges:
-X-axis: {{NUM: 0.0}} to {{NUM: 0.0}} N  
-Y-axis: {{NUM: 0.0}} to {{NUM: 0.0}} N  
-Z-axis: {{NUM: 0.0}} to {{NUM: 0.0}} N  
-Grasp: {{PNUM: 0.0}} to {{PNUM: 0.0}} N  
+Force/Torque Motion Estimation:
+Linear X-axis:   {{DESCRIPTION: estimated force range and justification based on friction, mass, resistance}}, thus {{NUM: 0.0}} to {{NUM: 0.0}}.
+Linear Y-axis:   {{DESCRIPTION: estimated force range and justification based on friction, mass, resistance}}, thus {{NUM: 0.0}} to {{NUM: 0.0}}.
+Linear Z-axis:   {{DESCRIPTION: estimated force range and justification based on friction, mass, resistance}}, thus {{NUM: 0.0}} to {{NUM: 0.0}} N.
+Angular X-axis: {{DESCRIPTION: estimated torque range and justification based on friction, mass, resistance}}, thus {{NUM: 0.0}} to {{NUM: 0.0}} N-m.
+Angular Y-axis: {{DESCRIPTION: estimated torque range and justification based on friction, mass, resistance}}, thus {{NUM: 0.0}} to {{NUM: 0.0}} N-m.
+Angular Z-axis: {{DESCRIPTION: estimated torque range and justification based on friction, mass, resistance}}, thus {{NUM: 0.0}} to {{NUM: 0.0}} N-m.
+Grasping force:  {{DESCRIPTION: estimated force range and justification based on friction, mass, resistance}}, thus {{PNUM: 0.0}} to {{PNUM: 0.0}} N .
 
 Python Code with Final Motion Plan:
 ```python
-# describe the motion along the [x, y, z] axes as either positive, negative, or no motion
-position_direction = [{{CHOICE: [-1, 0, 1}}, {{CHOICE: [-1, 0, 1}}, {{CHOICE: [-1, 0, 1}}]
-# resolve the magnitude of motion across the motion direction axes [x, y ,z]
-position_goal = [{{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}]
 # explicitly state the forces along the [x, y, z] axes
-force = [{{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}]
+wrench_description = "{{DESCRIPTION: describe succinctly the forces and torques required along which wrist axes of motion to accomplish the task}}"
+# explicitly state the forces and torques along the [x, y, z, rx, ry, rz] axes
+wrench= [{{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}]
 # explicitly state the grasping force, which must be positive
 grasp_force = {{PNUM: 0.0}}
 # explicitly state the task duration, which must be positive
