@@ -104,56 +104,9 @@ Rules:
 7. Make sure to provide the final python code for each requested force in a code block.
 """
 
-prompt_position_thinker = """
-Given the user instruction and two-part image containing a wrist-image view on the left, a third-person view on the right, generate a structured physical plan for a robot end-effector interacting with the environment.
+prompt_force_thinker = """
+Given the user instruction, position goals relative to the world and wrist frame, and a three-part image containing a wrist view with world-frame axes labeling, a third-person view in the middle, and a wrist view with wrist-frame axes labeling on the right, generate a structured physical plan for robot end-effector forces and torques interacting with the environment.
 The task is to {task} while grasping the {obj}.
-
-The robot is controlled using position and torque-based control, with access to contact feedback and 6D motion capabilities. 
-Motions can include grasping, lifting, pushing, tapping, sliding, rotating, or any interaction with objects or surfaces.
-
-Reason about the provided and implicit information in the images and task description to generate a structured plan for the robot's motion. Think about:
-- Object geometry and contact points (from the image)
-- Force/torque sensing at the wrist
-- Prior knowledge of object material types and mass estimates
-- Environmental knowledge (table, gravity, hinge resistance, etc.)
-
-The left image is labeled with the positive axes of motion relative to the base frame of the robot, as in the canonical world-axes (for example, the red positive Z-axis will always represent upward direction in the world).
-The right image is a third-person view of the robot, which may be used to help with the mapping of the axes and understanding the environment
-We must use the provided image data and physical reasoning to carefully map the true motion in the world frame to accomplish the task.
-
-[start of motion plan]
-The task is to {task} while grasping the {obj}.
-
-Aligning Images With World Frame Motion:
-The provided images in the two-part image confirm {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to the requested task}}.
-The red axis representing the positive world Z-axis corresponds to upward motion in the world. The object in the image is {{DESCRIPTION: the object's alignment with the upward world Z-axis, based upon its placement and orientation}}.
-The green axis representing the positive world X-axis corresponds to left-ward motion in the world. The object in the image is {{DESCRIPTION: the object's alignment with the left-ward world X-axis, based upon its placement and orientation}}.
-The blue axis representing the positive world Y-axis corresponds to backward motion in the world. The object in the image is {{DESCRIPTION: the object's alignment with the backward world Y-axis, based upon its placement and orientation}}.
-To accomplish the task in the world frame, the object must be moved {{DESCRIPTION: the object's required motion in the world frame to accomplish the task}}.
-
-Python Code with Final Motion Plan:
-```python
-# describe the motion along the [x, y, z] axes as either positive, negative, or no motion
-position_direction = [{{CHOICE: [-1, 0, 1}}, {{CHOICE: [-1, 0, 1}}, {{CHOICE: [-1, 0, 1}}]
-# resolve the magnitude of motion across the motion direction axes [x, y ,z]
-position_goal = [{{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}]
-```
-
-[end of motion plan]
-
-Rules:
-1. Replace all {{DESCRIPTION: ...}}, {{PNUM: ...}}, {{NUM: ...}}, and {{CHOICE}} entries with specific values or statements.
-2. Use best physical reasoning based on known robot/environmental capabilities. Remember that the robot may have to exert forces in additional axes compared to the motion direction axes in order to maintain contacts between the object, robot, and environment.
-3. Always include motion for all three axes, even if it's "No motion required."
-4. Keep the explanation concise but physically grounded. Prioritize interpretability and reproducibility.
-5. Use common sense where exact properties are ambiguous, and explain assumptions.
-6. Do not include any sections outside the start/end blocks or add non-specified bullet points.
-7. Make sure to provide the final python code for each requested force in a code block.
-"""
-
-
-prompt_motion_thinker_2image = """
-Given the user instruction and two-part image containing a third-person view on the left and a wrist view on the right, generate a structured physical plan for a robot end-effector interacting with the environment.
 
 The robot is controlled using position and torque-based control, with access to contact feedback and 6D motion capabilities. 
 Motions can include grasping, lifting, pushing, tapping, sliding, rotating, or any interaction with objects or surfaces.
@@ -164,12 +117,27 @@ Assume the robot has access to:
 - Prior knowledge of object material types and mass estimates
 - Environmental knowledge (table, gravity, hinge resistance, etc.)
 
-Use physical reasoning to complete the following plan in a structured format.
+Use physical reasoning to complete the following plan in a structured format. Use the provided motion plans in the world and wrist frame to help understand the task's forces and torques.
+We want to reason about forces and torques relative to the wrist frame because that is the frame of reference for the F/T sensor.
+More importantly, as the wrist's end-effector is grasping the object, assuming no slip, the requisite applied forces and especially torques on the object to accomplish the task will be the same as the forces and torques on the wrist frame.
 
 [start of motion plan]
-The task is to {task} while grasping the {obj}.
-
 Aligning Image With Motion:
+The task is to {task} while grasping the {obj}.
+The world frame motion to accomplish this task is {world_motion} (x, y, z in meters) because {world_motion_description}.
+Using the robot pose data, this world motion resolves to the following positional motion along wrist frame: {wrist_motion}.
+This is because, in the right image with the labeled wrist axes, the center red dot going into the page representing the positive wrist Z-axis corresponds to forward motion from the wrist and camera. Based off knowledge of the task and motion in the world frame, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
+Then, the green axis in the right image representing the positive wrist X-axis does not have a strict correspondence. Based off knowledge of the task and motion in the world frame and the forward motion of the positive wrist Z-axis, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
+Finally, the blue axis in the right image representing positive wrist Y-axis does not have a strict correspondence. Based off knowledge of the task and motion in the world frame and the forward motion of the positive wrist Z-axis, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
+To accomplish the task in the wrist frame, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
+Thus, in order to complete the task, the required linear wrist motion along the green axis representing the positive X-axis is {{DESCRIPTION: the potential linear motion or lack thereof of the object in the image to accomplish the task}}.
+Thus, in order to complete the task, the required linear wrist motion along the blue axis representing positive Y-axis is {{DESCRIPTION: the potential linear motion or lack thereof of the object in the image to accomplish the task}}.
+Thus, in order to complete the task, the required linear wrist motion along the red dot representing the positive Z-axis (into the page) is {{DESCRIPTION: the potential linear motion or lack thereof of the object in the image to accomplish the task}}.
+Thus, in order to complete the task, the required angular wrist motion about the green axis representing the positive X-axis is {{DESCRIPTION: the potential angular motion or lack thereof of the object in the image to accomplish the task}}.
+Thus, in order to complete the task, the required angular wrist motion about the blue axis representing positive Y-axis is {{DESCRIPTION: the potential angular motion or lack thereof of the object in the image to accomplish the task}}.
+Thus, in order to complete the task, the required angular wrist motion about the red dot representing the positive Z-axis (into the page) is {{DESCRIPTION: the potential angular motion or lack thereof of the object in the image to accomplish the task}}.
+Succinct motion plan: {{DESCRIPTION: describe succinctly the motion required along which wrist axes of motion}}.
+
 The right image is labeled with the axes of motion relative to the wrist of the robot. 
 The wrist of the robot may be oriented differently from the canonical world-axes, and so the upward axis (-Y axis) in the image may not correspond to the upward axis in the world.
 Thus, we must carefully map the motion axes of the wrist the true motion in the world. Use the left image, whis is a third-person view of the robot, to help with this mapping.
