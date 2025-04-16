@@ -24,7 +24,7 @@ The goal is to analyze the robot's performance and modify the motion plan if nec
 - Modify the required forces, torques, positions, and task duration to improve the robot's performance. If it is safe and appropriate to do so, try to speed up the task.  
 
 Here are the results of the robot's interaction with the environment. 
-{results}
+{motion_report}
 
 [beginning of reflection]
 Reflection on Task:
