@@ -20,11 +20,11 @@ The task is to {task} while grasping the {obj}.
 Aligning Images With World Frame Motion:
 The provided images in the two-part image confirm {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to the requested task}}.
 The red axis representing the world Z-axis corresponds to upward (positive) and downward (negative) motion in the world. 
-To complete the task, the object in the image must perform {{CHOICE: [upward and positive, downward and negative, no]}} motion along the Z-axis with magnitude {{PNUM: 0.0}} meters.
+To complete the task, the object in the image should have {{CHOICE: [upward and positive, downward and negative, no]}} linear motion along the Z-axis with magnitude {{PNUM}} meters.
 The green axis representing the world X-axis corresponds to left (positive) and right (negative) motion in the world, relative to the robot. 
-To complete the task, the object in the image must perform {{CHOICE: [leftward and positive, rightward and negative, no]}} motion along the X-axis with magnitude {{PNUM: 0.0}} meters.
+To complete the task, the object in the image should have {{CHOICE: [leftward and positive, rightward and negative, no]}} linear motion along the X-axis with magnitude {{PNUM}} meters.
 The blue axis representing the world Y-axis corresponds to backward (positive) and forward (negative) motion in the world, relative to the robot. 
-To complete the task, the object in the image must perform {{CHOICE: [backward and positive, forward and negative, no]}} motion along the Y-axis with magnitude {{PNUM: 0.0}} meters.
+To complete the task, the object in the image should have {{CHOICE: [backward and positive, forward and negative, no]}} linear motion along the Y-axis with magnitude {{PNUM}} meters.
 To accomplish the task in the world frame, the object must be moved {{DESCRIPTION: the object's required motion in the world frame to accomplish the task}}.
 
 Python Code with Final Motion Plan:
@@ -34,20 +34,20 @@ world_motion_description = "{{DESCRIPTION: the object's required motion in the w
 # describe the motion along the [x, y, z] axes as either positive, negative, or no motion
 world_motion_direction = [{{CHOICE: [-1, 0, 1}}, {{CHOICE: [-1, 0, 1}}, {{CHOICE: [-1, 0, 1}}]
 # the magnitude of motion across the motion direction axes [x, y ,z]
-world_motion_magnitude = [{{PNUM: 0.0}}, {{PNUM: 0.0}}, {{PNUM: 0.0}}]
+world_motion_magnitude = [{{PNUM}}, {{PNUM}}, {{PNUM}}]
 # the vector (sign of direction * magnitude) of motion across the motion direction axes [x, y ,z]
-world_motion_vector = [{{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}]
+world_motion_vector = [{{NUM}}, {{NUM}}, {{NUM}}]
 ```
 
 [end of position motion plan]
 
 Rules:
-1. Replace all {{DESCRIPTION: ...}}, {{PNUM: ...}}, {{NUM: ...}}, and {{CHOICE}} entries with specific values or statements.
+1. Replace all {{DESCRIPTION: ...}}, {{PNUM}}, {{NUM}}, and {{CHOICE: ..}} entries with specific values or statements. For example, {{PNUM}} should be replaced with a number like 0.5 and {{CHOICE: [-1, 0, 1]}} should be entirely replaced with a selection like 1. The placedhold text and brackets should be removed completely! This is very important for downstream parsing!!
 2. Always include motion for all three axes, even if it's "No motion required."
 3. Keep the explanation concise but physically grounded. 
 4. Use common sense where exact properties are ambiguous, and explain assumptions.
 5. Do not include any sections outside the start/end blocks or add non-specified bullet points.
-6. Make sure to provide the final python code for each requested force in a code block.
+7. Make sure to provide the final python code for each requested force in a code block. Remember to fully replace the placeholder text with the actual values!
 7. Remember that for the Y-axis, backward motion is positive and forward motion is negative, while for the X-axis, leftward motion is positive and rightward motion is negative.
 """
 
@@ -94,14 +94,14 @@ position_motion_reflection = "{{DESCRIPTION: describe the task state, partially 
 # describe whether or not to reset the task (True/False) completely and whether it was a complete failure (False) or complete success (True). In the case of failure, the motion plan described will be executed only after the reset
 reset_task_info = {{CHOICE: [True, False]}}
 # the magnitude of motion across the motion direction axes [x, y ,z]
-world_motion_magnitude = [{{PNUM: 0.0}}, {{PNUM: 0.0}}, {{PNUM: 0.0}}]
+world_motion_magnitude = [{{PNUM}}, {{PNUM}}, {{PNUM}}]
 # the vector (sign of direction * magnitude) of motion across the motion direction axes [x, y ,z]
-world_motion_vector = [{{NUM: 0.0}}, {{NUM: 0.0}}, {{NUM: 0.0}}]
+world_motion_vector = [{{NUM}}, {{NUM}}, {{NUM}}]
 ```
 [end of positional motion reflection]
 
 Rules:
-1. Replace all {{DESCRIPTION: ...}}, {{PNUM: ...}}, {{NUM: ...}}, and {{CHOICE}} entries with specific values or statements.
+1. Replace all {{DESCRIPTION: ...}}, {{PNUM: ...}}, {{NUM: ...}}, and {{CHOICE}} entries with specific values or statements. For example, {{PNUM}} should be replaced with a number like 0.5. This is very important for downstream parsing!!
 2. Always include motion for all three axes, even if it's "No motion required."
 3. Keep the explanation concise but physically grounded. Prioritize interpretability and reproducibility.
 4. Use common sense where exact properties are ambiguous, and explain assumptions.

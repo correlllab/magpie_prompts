@@ -73,7 +73,7 @@ def build_messages(text=None, image=None, messages=[], model_type="gemini", role
         if text is not None:
             content_type = "input_text"
             if role != "user":
-               content_type = "output_text"
+                content_type = "output_text"
             content.append({"type": content_type, "text": text})
         if image is not None:
             content.append({
