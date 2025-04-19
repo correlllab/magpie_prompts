@@ -127,12 +127,12 @@ The task is to {task} while grasping the {obj}.
 
 Understanding Object-Centric Motion in the World Frame:
 The provided images in the two-part image confirm {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to the requested task}}.
-The red axis representing the world Z-axis corresponds to upward (positive) and downward (negative) motion in the world. 
-To complete the task, the object in the image should have {{CHOICE: [upward and positive, downward and negative, no]}} linear motion along the Z-axis with magnitude {{PNUM}} meters.
-The green axis representing the world X-axis corresponds to left (positive) and right (negative) motion in the world, relative to the robot. 
-To complete the task, the object in the image should have {{CHOICE: [leftward and positive, rightward and negative, no]}} linear motion along the X-axis with magnitude {{PNUM}} meters.
-The blue axis representing the world Y-axis corresponds to backward (positive) and forward (negative) motion in the world, relative to the robot. 
-To complete the task, the object in the image should have {{CHOICE: [backward and positive, forward and negative, no]}} linear motion along the Y-axis with magnitude {{PNUM}} meters.
+The red axis representing the world Z-axis corresponds to upward and downward motion in the world. 
+To complete the task, the object in the image should have {{CHOICE: [upward, downward, no]}} linear motion along the Z-axis with magnitude {{PNUM}} meters.
+The green axis representing the world X-axis corresponds to left and right motion in the world, relative to the robot. 
+To complete the task, the object in the image should have {{CHOICE: [leftward, rightward, no]}} linear motion along the X-axis with magnitude {{PNUM}} meters.
+The blue axis representing the world Y-axis corresponds to backward and forward motion in the world, relative to the robot. 
+To complete the task, the object in the image should have {{CHOICE: [backward, forward, no]}} linear motion along the Y-axis with magnitude {{PNUM}} meters.
 To accomplish the task in the world frame, the object must be moved {{DESCRIPTION: the object's required motion in the world frame to accomplish the task}}.
 
 Understanding Robot-Applied Forces and Torques to Move Object in the World Frame:
@@ -155,7 +155,7 @@ Physical Model Computations:
 - Force/torque motion computations with object of mass {{NUM}} kg and static friction coefficient of {{NUM}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the surface friction using appropriate formulae and quantities}}.
 
 Force/Torque Motion Estimation:
-Linear X-axis:  To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: [leftward and positive, rightward and negative, no]}} force along the Z-axis with magnitude {{PNUM}} N.
+Linear X-axis:  To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: [leftward and positive, rightward and negative, no]}} force along the X-axis with magnitude {{PNUM}} N.
 Linear Y-axis:  To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: [backward and positive, forward and negative, no]}} force along the Y-axis with magnitude {{PNUM}} N.
 Linear Z-axis:  To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: linear [upward and positive, downward and negative, no]}} force along the Z-axis with magnitude {{PNUM}} N.
 Angular X-axis: To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: angular [counterclockwise and positive, clockwise and negative, no]}} torque about the X-axis with magnitude {{PNUM}} N-m.
