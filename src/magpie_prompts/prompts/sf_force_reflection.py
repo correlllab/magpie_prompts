@@ -101,7 +101,7 @@ Rules:
 prompt_base_frame_reflector = """
 The robot has executed the initially provided motion plan, and now we need to analyze the ground-truth positions and forces during this interaction.
 The feedback is as follows: 
-- A two-part image containing a wrist-image view on the left, a third-person view on the right
+-Two two-part images each containing a wrist-image view on the left, a third-person view on the right. One is from prior to the robot's motion and the other is from after the robot's motion.
 - the change in position relative to the wrist
 - the change in position relative to the robot base, or the world frame
 - The duration of the task
@@ -114,20 +114,16 @@ The task was to {task} while grasping the {obj}.
 
 The goal is to analyze the robot's performance, given the feedback, and modify the motion plan if necessary or to improve task performance:
 - You should consider the visual feedback from the two-part image, the change in position, the forces, and potentially and especially the human feedback to determine if the task was successful.
-- Thus, refer to both the prior and current three-part images, which show world-frame axes before and after the robot's motion.
 - A potential cause of inconsistency with the motion plan and task failure is that the initial motion plan was incorrect, particularly if the robot was not able to move in the desired direction.
 - Refer to the world-frame axes labeled on the prior and current image to help map the ground-truth motion history in the world frame.
 - Note that some positional changes may be due to slip in the gripper, which can be observed visually and in the contact force history, and can be counteracted by increasing the grasping force. 
-- However, make sure to not increase the grasping force too much, as this can cause damage to the object or gripper.
 - After doing this analysis, you should be able to determine if the robot was able to accomplish the task of {task} while grasping the {obj} via close analysis of the provided feedback.
-- If the robot and object moved in the correct direction and the forces relative to the prior wrist-frame were sufficient with the task, then the task was successful.
-- You may not have had all the information about the scene and object for the initial plan. If possible, use the feedback and experience to better understand the physical properties of the object and environment.
 - Modify the required forces, torques, positions, and task duration to improve the robot's performance. If it is safe and appropriate to do so, try to speed up the task.  
 
 The robot is controlled using position and torque-based control, with access to contact feedback and 6D motion capabilities. 
 Motions can include grasping, lifting, pushing, tapping, sliding, rotating, or any interaction with objects or surfaces.
 
-Reason about the provided and implicit information in the images and task description to generate a structured plan for the robot's positional motion. Think about:
+Reason about the provided and implicit information in the images, feedback, and desired task behavior to modify or create a structured plan for the robot's motion. Think about:
 - Object geometry and contact points (from the image)
 - Prior knowledge of object material types and mass estimates
 - Force/torque sensing at the wrist
@@ -135,7 +131,7 @@ Reason about the provided and implicit information in the images and task descri
 
 The left image is labeled with the axes of motion relative to the base frame of the robot, as in the canonical world-axes (for example, the red positive Z-axis will always represent upward direction in the world).
 The right image is a third-person view of the robot, which may be used to help with the mapping of the axes and understanding the environment
-We must use the provided image data and physical reasoning to carefully map the true motion in the world frame to accomplish the task.
+Use the provided image data and physical reasoning to carefully map the true motion in the world frame to accomplish the task.
 We want to reason about forces and torques relative to the world frame.
 
 [start of motion plan]
