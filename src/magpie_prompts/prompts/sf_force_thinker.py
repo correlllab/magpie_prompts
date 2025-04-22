@@ -122,6 +122,14 @@ The right image is a third-person view of the robot, which may be used to help w
 We must use the provided image data and physical reasoning to carefully map the true motion in the world frame to accomplish the task.
 We want to reason about forces and torques relative to the world frame.
 
+Direction Guide:
+- Upward motion in the world corresponds to {up} motion along the Z-axis.
+- Downward motion in the world corresponds to {down} motion along the Z-axis.
+- Leftward motion in the world corresponds to {left} motion along the X-axis.
+- Rightward motion in the world corresponds to {right} motion along the X-axis.
+- Backward motion in the world corresponds to {backward} motion along the Y-axis.
+- Forward motion in the world corresponds to {forward} motion along the Y-axis.
+
 [start of motion plan]
 The task is to {task} while grasping the {obj}.
 
@@ -155,24 +163,26 @@ Physical Model Computations:
 - Force/torque motion computations with object of mass {{NUM}} kg and static friction coefficient of {{NUM}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the surface friction using appropriate formulae and quantities}}.
 
 Force/Torque Motion Estimation:
-Linear X-axis:  To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: [leftward and positive, rightward and negative, no]}} force along the X-axis with magnitude {{PNUM}} N.
-Linear Y-axis:  To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: [backward and positive, forward and negative, no]}} force along the Y-axis with magnitude {{PNUM}} N.
-Linear Z-axis:  To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: linear [upward and positive, downward and negative, no]}} force along the Z-axis with magnitude {{PNUM}} N.
-Angular X-axis: To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: angular [counterclockwise and positive, clockwise and negative, no]}} torque about the X-axis with magnitude {{PNUM}} N-m.
-Angular Y-axis: To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: angular [counterclockwise and positive, clockwise and negative, no]}} torque about the Y-axis with magnitude {{PNUM}} N-m.
-Angular Z-axis: To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: angular [counterclockwise and positive, clockwise and negative, no]}} torque about the Z-axis with magnitude {{PNUM}} N-m.
+Linear X-axis:  To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: [leftward, rightward, no]}} force along the X-axis with magnitude {{PNUM}} N.
+Linear Y-axis:  To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: [backward, forward, no]}} force along the Y-axis with magnitude {{PNUM}} N.
+Linear Z-axis:  To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: linear [upward, downward, no]}} force along the Z-axis with magnitude {{PNUM}} N.
+Angular X-axis: To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: angular [counterclockwise, clockwise, no]}} torque about the X-axis with magnitude {{PNUM}} N-m.
+Angular Y-axis: To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: angular [counterclockwise, clockwise, no]}} torque about the Y-axis with magnitude {{PNUM}} N-m.
+Angular Z-axis: To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: angular [counterclockwise, clockwise, no]}} torque about the Z-axis with magnitude {{PNUM}} N-m.
 Grasping force:  {{DESCRIPTION: estimated force range and justification based on friction, mass, resistance}}, thus {{PNUM}} to {{PNUM}} N .
 
 
 Python Code with Final Motion Plan:
 ```python
+# succinct text description of the explicit estimated physical properties of the object, including mass, material, friction coefficients, etc.
+property_description = "{{DESCRIPTION: describe succinctly the object and its properties}}"
 # succinct text description of the motion plan along the world axes
 world_motion_description = "{{DESCRIPTION: the object's required position motion in the world frame to accomplish the task}}"
-# describe the motion along the [x, y, z] axes as either positive, negative, or no motion
+# describe the motion along the [x, y, z] axes as either positive, negative, or no motion, based on the mapping of world-relative motion to positive/negative motion provided in the direction guide
 world_motion_direction = [{{CHOICE: [-1, 0, 1]}}, {{CHOICE: [-1, 0, 1]}}, {{CHOICE: [-1, 0, 1]}}]
 # the magnitude of motion across the motion direction axes [x, y ,z]
 world_motion_magnitude = [{{PNUM}}, {{PNUM}}, {{PNUM}}]
-# the vector (sign of direction * magnitude) of motion across the motion direction axes [x, y ,z]
+# the vector (sign of direction * magnitude) of motion across the motion direction axes [x, y ,z]. 
 world_motion_vector = [{{NUM}}, {{NUM}}, {{NUM}}]
 # succinct text description of the planned forces and torques on the object in the world frame
 ft_description = "{{DESCRIPTION: describe succinctly the forces and torques required in the world frame to accomplish the task}}"
@@ -197,6 +207,7 @@ Rules:
 6. Do not include any sections outside the start/end blocks or add non-specified bullet points.
 7. Make sure to provide the final python code for each requested force in a code block. Remember to fully replace the placeholder text with the actual values!
 8. Do not abbreviate the prompt when generating the response. Fully reproduce the template, but filled in with your reasoning.
+9. Make sure to refer to the provided correspondence in the direction guide between motion in the world frame and positive/negative motion in the respective axes.
 """
 
 prompt_force_thinker = """

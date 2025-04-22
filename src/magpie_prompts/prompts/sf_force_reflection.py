@@ -176,6 +176,8 @@ Proposed Changes to Motion Plan:
 
 Python Code with Updated Motion Plan after Reflection:
 ```python
+# succinct text description, updated with reflection over feedback, of the explicit estimated physical properties of the object, including mass, material, friction coefficients, etc.
+property_description = "{{DESCRIPTION: describe succinctly the object and its properties}}"
 # succinct text description of the motion plan along the world axes
 world_motion_reflection = "{{DESCRIPTION: describe succinctly the reasoning about visual, positional, and forces/torque feedback that explains task completion and the proposed changes}}"
 # describe the motion along the [x, y, z] axes as either positive, negative, or no motion
