@@ -119,19 +119,18 @@ The goal is to analyze the robot's performance, given the feedback, and modify t
 - Note that some positional changes may be due to slip in the gripper, which can be observed visually and in the contact force history, and can be counteracted by increasing the grasping force. 
 - After doing this analysis, you should be able to determine if the robot was able to accomplish the task via close analysis of the provided feedback.
 - Modify the required forces, torques, positions, and task duration to improve the robot's performance. If it is safe and appropriate to do so, try to speed up the task.  
+- Given the observed position motion, time duration, and average force and torque applied, reassess whether the original physical estimates and equation-based computations of motion based upon the prescribed equations of motion were sufficient to explain the result. 
+- Update any properties that were likely over- or under-estimated (such as mass, surface friction, hinge stiffness, or rotational inertia). 
+- Often times there will be multiple confounding and related variables, such as mass and friction. Consider which of your initial mass estimate of the object, your initial friction estimate of the surface, or other estimates are more likely to be previously unknown and thus subject to greater change. Oftentimes objects and their contents may be occluded or not fully visible, in the same vein but less common, surfaces may not be what they visually appear as.
+- In cases where there is large error, you may have to drastically change the estimates of the physical properties of the object and surface and/or the forces required.
+- Then recompute the forces and torques required to accomplish the task, and update the motion plan accordingly.
+- Note that there will always be some noise in the wrench data and position data resulting from real-world motion and contact. 
 
-The robot is controlled using position and torque-based control, with access to contact feedback and 6D motion capabilities. 
-Motions can include grasping, lifting, pushing, tapping, sliding, rotating, or any interaction with objects or surfaces.
 The left image is labeled with the axes of motion relative to the base frame of the robot, as in the canonical world-axes (for example, the red positive Z-axis will always represent upward direction in the world).
 The right image is a third-person view of the robot, which may be used to help with the mapping of the axes and understanding the environment
 Use the provided image data and physical reasoning to carefully reason about the requisite motion and forces in the world frame to accomplish the task.
 Reason about the provided and implicit information in the images, feedback, and desired task behavior to modify or create a structured plan for the robot's motion. 
 Think about object and environment geometry, material, contact points, and physical properties (friction, dynamics, degrees of freedom) obtained from the image and prior knowledge
-
-Here are the results of the robot's interaction with the environment. 
-{motion_report}
-
-Human Feedback: {human_feedback}
 
 [beginning of reflection]
 The task is to {task} while grasping the {obj}.
@@ -144,17 +143,8 @@ The green axis representing the world X-axis corresponds to left and right motio
 The change in the world X-axis position was {{CHOICE: [correct, incorrect]}} relative to the estimated position goal because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
 The blue axis representing the world Y-axis corresponds to backward and forward motion in the world, relative to the robot. 
 The change in the world Y-axis position was {{CHOICE: [correct, incorrect]}} relative to the estimated position goal because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-To accomplish the task in the world frame, the object must be moved {{DESCRIPTION: the object's required motion in the world frame to accomplish the task}}.
+To complete the task, the object should additionally {{DESCRIPTION: the object's required motion in the world frame to complete the task, if required}}.
 
-The force applied along the linear X-axis force was {{CHOICE: [correct, incorrect]}} relative to the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-The force applied along the linear Y-axis force was {{CHOICE: [correct, incorrect]}} relative to the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-The force applied along the linear Z-axis force was {{CHOICE: [correct, incorrect]}} relative to the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-The torque applied about the angular X-axis torque was {{CHOICE: [correct, incorrect]}} relative to the estimated torque because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-The torque applied about the angular Y-axis torque was {{CHOICE: [correct, incorrect]}} relative to the estimated torque because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-The torque applied about the angular Z-axis torque was {{CHOICE: [correct, incorrect]}} relative to the estimated torque because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-The robot's grasping force was {{CHOICE: [sufficient, insufficient]}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-
-Based on the provided feedback the object and surface properties are {{DESCRIPTION: explicitly describe the object properties, such as mass, friction, and stiffness}}.
 The robot {{CHOICE: [was, was not]}} able to accomplish the task because {{DESCRIPTION: succinctly describe the reasoning about visual, positional, and force/torque feedback that confirms or denies task completion}}.
 If the task was incomplete, describe the task state: {{DESCRIPTION: describe the task state, partially completed, bad position, or complete failure, utilizing the provided details}}.
 The estimated task duration was {{CHOICE: [sufficient, insufficient]}} to complete the desired task.
@@ -162,34 +152,34 @@ The estimated task duration was {{CHOICE: [sufficient, insufficient]}} to comple
 Proposed Changes to Motion Plan:
 - The task {{CHOICE: [is, is not]}} either fully completed or failed beyond recovery, so the task {{CHOICE: [should, should not]}} be reset to try again.
 - The plan {{CHOICE: [is, is not]}} is partially incorrect or incomplete, thus the robot {{CHOICE: [should, should not]}} change the motion plan by {{DESCRIPTION: describe the changes to the motion plan, such as changing the direction and/or magnitudes of positional and/or force/torque goals}}.
-- The task duration should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: brief concluding thought based on motion achieved within the previously specified task duration}}
-- The world X-axis goal position should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
-- The world Y-axis goal position should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
-- The world Z-axis goal position should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
-- The world linear X-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
-- The world linear Y-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
-- The world linear Z-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
-- The world angular X-axis torque should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
-- The world angular Y-axis torque should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
-- The world angular Z-axis torque should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
-- The grasping force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: brief concluding thought based on prior reasoning}}
+- The world X-axis goal position should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion}}
+- The world Y-axis goal position should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion}}
+- The world Z-axis goal position should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion}}
+- The new task duration should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: describe the additional time required, if at all, to complete the task given the prior motion and new motion plan}}
+
+Recomputing Physical Model and Force Plan :
+The previous motion plan, using the physical property estimates of {{DESCRIPTION: describe the previously estimated object and surface properties}} computed the motion plan using the following equations of motion to model the task {{DESCRIPTION: redescribe in full the equations of motion used to compute the task previously and their results}}.
+Now, recomputing these computations using the provided true ground-truth position change, the updated position plan, the updated task duration, and average net forces and torques, {{DESCRIPTION: recompute the same motion and equations with the ground truth information about net forces and position change, which should yield information on the object properties like mass and friction}}
+Based off what was and was not understood about the various physical properties, the previously estimated physical properties of the object and surface are approximately {{DESCRIPTION: describe the updated estimates for the physical properties such as mass and friction based off of the ground-truth information and understanding of the properties from previous visual and semantic cues}}.
+To accomplish the task, using the updated physical properties, the forces and motion required are {{DESCRIPTION: fully describe the computations for motion using the ground truth data}}.
+
+Proposed Changes to Motion Plan:
+- The world linear X-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion}}
+- The world linear Y-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion}}
+- The world linear Z-axis force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion}}
+- The world angular X-axis torque should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion}}
+- The world angular Y-axis torque should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion}}
+- The world angular Z-axis torque should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion}}
+- The grasping force should be {{CHOICE: [increased, decreased, no change]}} by {{NUM}} because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion}}
 
 Python Code with Updated Motion Plan after Reflection:
 ```python
-# succinct text description, updated with reflection over feedback, of the explicit estimated physical properties of the object, including mass, material, friction coefficients, etc.
-property_description = "{{DESCRIPTION: describe succinctly the object and its properties}}"
 # succinct text description of the motion plan along the world axes
 world_motion_reflection = "{{DESCRIPTION: describe succinctly the reasoning about visual, positional, and forces/torque feedback that explains task completion and the proposed changes}}"
-# describe the motion along the [x, y, z] axes as either positive, negative, or no motion
-world_motion_direction = [{{CHOICE: [-1, 0, 1]}}, {{CHOICE: [-1, 0, 1]}}, {{CHOICE: [-1, 0, 1]}}]
-# the magnitude of motion across the motion direction axes [x, y ,z]
-world_motion_magnitude = [{{PNUM}}, {{PNUM}}, {{PNUM}}]
-# the vector (sign of direction * magnitude) of motion across the motion direction axes [x, y ,z]
+# boolean flag on whether to reset the task
+reset_task = {{CHOICE: [True, False]}}
+# the vector (sign of direction * magnitude) of relative motion across the motion direction axes [x, y ,z] (relative as in additional motion required to accomplish the task from prior motion)
 world_motion_vector = [{{NUM}}, {{NUM}}, {{NUM}}]
-# succinct text description of the planned forces and torques on the object in the world frame
-ft_description = "{{DESCRIPTION: describe succinctly the forces and torques required in the world frame to accomplish the task}}"
-# the magnitudes of the forces and torques along the [x, y, z, rx, ry, rz] axes
-ft_magnitude = [{{PNUM}}, {{PNUM}}, {{PNUM}}, {{PNUM}}, {{PNUM}}, {{PNUM}}]
 # the vector (sign of direction * magnitude) of the forces and torques along the [x, y, z, rx, ry, rz] axes
 ft_vector = [{{NUM}}, {{NUM}}, {{NUM}}, {{NUM}}, {{NUM}}, {{NUM}}]
 # the grasping force, which must be positive
@@ -212,6 +202,35 @@ Rules:
 8. Do not abbreviate the prompt when generating the response. Fully reproduce the template, but filled in with your reasoning.
 9. If the task is either fully completed or failed beyond recovery, the task should be reset to try again. The motion plan should be updated to reflect starting from the beginning of the task.
 """
+
+scraps = '''
+Here are the results of the robot's interaction with the environment. 
+{motion_report}
+
+Human Feedback: {human_feedback}
+
+# succinct text description, updated with reflection over feedback, of the explicit estimated physical properties of the object, including mass, material, friction coefficients, etc.
+property_description = "{{DESCRIPTION: describe succinctly the object and its properties}}"
+# describe the motion along the [x, y, z] axes as either positive, negative, or no motion
+world_motion_direction = [{{CHOICE: [-1, 0, 1]}}, {{CHOICE: [-1, 0, 1]}}, {{CHOICE: [-1, 0, 1]}}]
+# the magnitude of motion across the motion direction axes [x, y ,z]
+world_motion_magnitude = [{{PNUM}}, {{PNUM}}, {{PNUM}}]
+# succinct text description of the planned forces and torques on the object in the world frame
+ft_description = "{{DESCRIPTION: describe succinctly the forces and torques required in the world frame to accomplish the task}}"
+# the magnitudes of the forces and torques along the [x, y, z, rx, ry, rz] axes
+ft_magnitude = [{{PNUM}}, {{PNUM}}, {{PNUM}}, {{PNUM}}, {{PNUM}}, {{PNUM}}]
+
+The robot is controlled using position and torque-based control, with access to contact feedback and 6D motion capabilities. 
+Motions can include grasping, lifting, pushing, tapping, sliding, rotating, or any interaction with objects or surfaces.
+
+The force applied along the linear X-axis force was {{CHOICE: [correct, incorrect]}} relative to the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+The force applied along the linear Y-axis force was {{CHOICE: [correct, incorrect]}} relative to the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+The force applied along the linear Z-axis force was {{CHOICE: [correct, incorrect]}} relative to the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+The torque applied about the angular X-axis torque was {{CHOICE: [correct, incorrect]}} relative to the estimated torque because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+The torque applied about the angular Y-axis torque was {{CHOICE: [correct, incorrect]}} relative to the estimated torque because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+The torque applied about the angular Z-axis torque was {{CHOICE: [correct, incorrect]}} relative to the estimated torque because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+The robot's grasping force was {{CHOICE: [sufficient, insufficient]}} with the estimated forces because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
+'''
 
 import re
 import sys

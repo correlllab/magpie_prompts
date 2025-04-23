@@ -122,24 +122,16 @@ The right image is a third-person view of the robot, which may be used to help w
 We must use the provided image data and physical reasoning to carefully map the true motion in the world frame to accomplish the task.
 We want to reason about forces and torques relative to the world frame.
 
-Direction Guide:
-- Upward motion in the world corresponds to {up} motion along the Z-axis.
-- Downward motion in the world corresponds to {down} motion along the Z-axis.
-- Leftward motion in the world corresponds to {left} motion along the X-axis.
-- Rightward motion in the world corresponds to {right} motion along the X-axis.
-- Backward motion in the world corresponds to {backward} motion along the Y-axis.
-- Forward motion in the world corresponds to {forward} motion along the Y-axis.
-
 [start of motion plan]
 The task is to {task} while grasping the {obj}.
 
 Understanding Object-Centric Motion in the World Frame:
 The provided images in the two-part image confirm {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to the requested task}}.
-The red axis representing the world Z-axis corresponds to upward and downward motion in the world. 
+The red axis representing the world Z-axis corresponds to upward (positive) and downward (negative) motion in the world. 
 To complete the task, the object in the image should have {{CHOICE: [upward, downward, no]}} linear motion along the Z-axis with magnitude {{PNUM}} meters.
-The green axis representing the world X-axis corresponds to left and right motion in the world, relative to the robot. 
+The green axis representing the world X-axis corresponds to right (positive) and left (negative) motion in the world, relative to the robot. 
 To complete the task, the object in the image should have {{CHOICE: [leftward, rightward, no]}} linear motion along the X-axis with magnitude {{PNUM}} meters.
-The blue axis representing the world Y-axis corresponds to backward and forward motion in the world, relative to the robot. 
+The blue axis representing the world Y-axis corresponds to forward (positive) and backward (negative) motion in the world, relative to the robot. 
 To complete the task, the object in the image should have {{CHOICE: [backward, forward, no]}} linear motion along the Y-axis with magnitude {{PNUM}} meters.
 To accomplish the task in the world frame, the object must be moved {{DESCRIPTION: the object's required motion in the world frame to accomplish the task}}.
 

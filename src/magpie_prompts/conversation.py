@@ -17,6 +17,7 @@
 
 import time
 from typing import Any
+import numpy as np
 
 from openai import OpenAI
 
@@ -58,7 +59,7 @@ def openai_encode_image(image):
     img = image.save(buffer, format="JPEG") # image is PIL image
     return base64.b64encode(buffer.getvalue()).decode("utf-8")
 
-def build_messages(text=None, image=None, messages=[], model_type="gemini", role="user"):
+def build_messages(text=None, image=None, messages=[], model_type="gemini", role="user", save=False):
     '''
     @param text (str): text to be sent to the model
     @param image (PIL.Image): image to be sent to the model
@@ -67,6 +68,7 @@ def build_messages(text=None, image=None, messages=[], model_type="gemini", role
         if text is not None:
           messages.append(text)
         if image is not None:
+          if save: image = openai_encode_image(image)
           messages.append(image)
     elif model_type == "openai":
         content = []
