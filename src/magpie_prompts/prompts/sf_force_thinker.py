@@ -137,10 +137,10 @@ To accomplish the task in the world frame, the object must be moved {{DESCRIPTIO
 
 Understanding Robot-Applied Forces and Torques to Move Object in the World Frame:
 To estimate the forces and torques required to accomplish {task} while grasping the {obj}, we must consider the following:
+- Object Properties: {{DESCRIPTION: Think very carefully about the estimated mass, material, stiffness, friction coefficient of the object based off the visual information and semantic knowledge about the object. If object is articulated, do the same reasoning for whatever joint / degree of freedom enables motion. }}.
+- Environmental Factors: {{DESCRIPTION: Think very carefully about the various environmental factors in task like gravity, surface friction, damping, hinge resistance that would interact with the object over the course of the task}}.
 - The relevant object is {{DESCRIPTION: describe the object and its properties}} has mass {{NUM}} kg and, with the robot gripper, has a static friction coefficient of {{NUM}}.
 - The surface of interaction is {{DESCRIPTION: describe the surface and its properties}} has a static friction coefficient of {{NUM}} with the object.
-- Object Properties: {{DESCRIPTION: estimated mass, material, stiffness, friction coefficient, if object is articulated, do the same reasoning for whatever joint / degree of freedom enables motion}}.
-- Environmental Factors: {{DESCRIPTION: consideration of various environmental factors in task like gravity, surface friction, damping, hinge resistance}}.
 - Contact Types: {{DESCRIPTION: consideration of various contacts such as edge contact, maintaining surface contact, maintaining a pinch grasp, etc.}}.
 - Motion Type: {{DESCRIPTION: consideration of forceful motion(s) involved in accomplishing task such as pushing forward while pressing down, rotating around hinge by pulling up and out, or sliding while maintaining contact}}.
 - Contact Considerations: {{DESCRIPTION: explicitly consider whether additional axes of force are required to maintain contact with the object, robot, and environmen and accomplish the motion goal}}.
@@ -152,6 +152,7 @@ Physical Model Computations:
 - Relevant equations: {{DESCRIPTION: include any relevant equations used in the calculations}}.
 - Relevant assumptions: {{DESCRIPTION: include any relevant assumptions made in the calculations}}.
 - Computations: {{DESCRIPTION: include in full detail any relevant calculations using the above information}}.
+- Grasping force computations: {{DESCRIPTION: typically, using the estimated mass m and estimated gripper-object friction mu, a good grasping force is (m*g)/mu. Use this calculation first and only modify it if deemed appropriate}}.
 - Force/torque motion computations with object of mass {{NUM}} kg and static friction coefficient of {{NUM}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the surface friction using appropriate formulae and quantities}}.
 
 Force/Torque Motion Estimation:
@@ -232,8 +233,6 @@ Understanding Forces and Torques Required for Motion:
 To estimate the forces and torques required to accomplish {task} while grasping the {obj}, we must consider the following:
 - The relevant object is {{DESCRIPTION: describe the object and its properties}} has mass {{NUM}} kg and, with the robot gripper, has a static friction coefficient of {{NUM}}.
 - The surface of interaction is {{DESCRIPTION: describe the surface and its properties}} has a static friction coefficient of {{NUM}} with the object.
-- Object Properties: {{DESCRIPTION: estimated mass, material, stiffness, friction coefficient, if object is articulated, do the same reasoning for whatever joint / degree of freedom enables motion}}.
-- Environmental Factors: {{DESCRIPTION: consideration of various environmental factors in task like gravity (and which wrist-axes gravity corresponds to), surface friction, damping, hinge resistance}}.
 - Contact Types: {{DESCRIPTION: consideration of various contacts such as edge contact, maintaining surface contact, maintaining a pinch grasp, etc.}}.
 - Motion Type: {{DESCRIPTION: consideration of forceful motion(s) involved in accomplishing task such as pushing forward while pressing down, rotating around hinge by pulling up and out, or sliding while maintaining contact}}.
 - Contact Considerations: {{DESCRIPTION: explicitly consider whether additional axes of force are required to maintain contact with the object, robot, and environmen and accomplish the motion goal}}.
