@@ -216,11 +216,14 @@ Assume the robot has access to:
 - Prior knowledge of object material types and mass estimates
 - Environmental knowledge (table, gravity, hinge resistance, etc.)
 
-Use physical reasoning to complete the following plan in a structured format. Use the provided motion plans in the world and wrist frame to help understand the task's forces and torques.
+The left image is labeled with the axes of motion relative to the base frame of the robot, as in the canonical world-axes (for example, the red positive Z-axis will always represent upward direction in the world).
+The middle image is a third-person view of the robot labeled with the base frame orientation of the robot, which may be used to help with the understanding the environmental properties and motion within the environment.
+The right image is labeled with the axes of motion relative to the wrist of the robot. The wrist of the robot may be oriented differently from the canonical world-axes.
+Use physical reasoning to complete the following plan in a structured format. Carefully map the required motion in the world to the required motion, forces, and torques at the wrist.
 We want to reason about forces and torques relative to the wrist frame because that is the frame of reference for the F/T sensor.
 More importantly, as the wrist's end-effector is grasping the object, assuming no slip, the requisite applied forces and especially torques on the object to accomplish the task will be the same as the forces and torques on the wrist frame.
 
-[start of wrench plan]
+[start of motion plan]
 Aligning Image With Motion:
 The task is to {task} while grasping the {obj}.
 The world frame motion to accomplish this task is {world_motion_vector} (x, y, z in meters) which resolves to the following positional motion along wrist frame: {wrist_motion_vector}.
