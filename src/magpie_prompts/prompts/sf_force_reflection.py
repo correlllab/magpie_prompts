@@ -26,9 +26,6 @@ The goal is to analyze the robot's performance, given the feedback, and modify t
 - You may not have had all the information about the scene and object for the initial plan. If possible, use the feedback and experience to better understand the physical properties of the object and environment.
 - Modify the required forces, torques, positions, and task duration to improve the robot's performance. If it is safe and appropriate to do so, try to speed up the task.  
 
-Here are the results of the robot's interaction with the environment. 
-{motion_report}
-
 [beginning of reflection]
 Reflection on Task:
 - The change in the world X-axis position corresponds to the prior wrist frame motion as such {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to map the world frame motion to the prior wrist frame's motion axes }}.
