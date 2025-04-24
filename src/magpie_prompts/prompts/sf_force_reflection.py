@@ -137,11 +137,11 @@ The task is to {task} while grasping the {obj}.
 
 Assessing Object-Centric Motion in the World Frame:
 The provided images in the two-part image confirm {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to completion of the requested task}}.
-The red axis representing the world Z-axis corresponds to upward and downward motion in the world. 
+The blue axis representing the world Z-axis corresponds to upward and downward motion in the world. 
 The change in the world Z-axis position was {{CHOICE: [correct, incorrect]}} relative to the estimated position goal because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-The green axis representing the world X-axis corresponds to left and right motion in the world, relative to the robot. 
+The red axis representing the world X-axis corresponds to left and right motion in the world, relative to the robot. 
 The change in the world X-axis position was {{CHOICE: [correct, incorrect]}} relative to the estimated position goal because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
-The blue axis representing the world Y-axis corresponds to backward and forward motion in the world, relative to the robot. 
+The green axis representing the world Y-axis corresponds to backward and forward motion in the world, relative to the robot. 
 The change in the world Y-axis position was {{CHOICE: [correct, incorrect]}} relative to the estimated position goal because {{DESCRIPTION: describe the reasoning about the visual, position, and force observations that to reach this conclusion }}.
 To complete the task, the object should additionally {{DESCRIPTION: the object's required motion in the world frame to complete the task, if required}}.
 
