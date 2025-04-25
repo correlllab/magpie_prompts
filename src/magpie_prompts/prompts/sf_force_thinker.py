@@ -16,7 +16,7 @@ Reason about the provided and implicit information in the images and task descri
 - Environmental knowledge (table, gravity, hinge resistance, etc.)
 
 The left image is a robot-wrist view labeled with the axes of motion relative to the base frame of the robot, as in the canonical world-axes (for example, the red positive Z-axis will always represent upward direction in the world).
-The middle image is a third-person view of the robot labeled with the base frame orientation of the robot, which may be used to help with the understanding the environmental properties and motion within the environment.
+The middle image is a third-person view of the robot labeled with the base robot coordinate frame, placed at the point of grasping, which may be used to help with the understanding the environmental properties and motion within the environment.
 The right image is a robot-wrist view labeled with the axes of motion relative to the wrist of the robot. The wrist of the robot may be oriented differently from the canonical world-axes.
 Use physical reasoning to complete the following plan in a structured format. Carefully map the required motion in the world to the required motion, forces, and torques at the wrist.
 
@@ -112,7 +112,7 @@ Reason about the provided and implicit information in the images and task descri
 - Prior knowledge of object material types and mass estimates
 - Environmental knowledge (table, gravity, hinge resistance, etc.)
 
-The image is a robot workspace view labeled with the axes of motion relative to the wrist of the robot. The wrist of the robot may be oriented differently from the canonical world-axes.
+The image is a robot workspace view labeled with the axes of motion relative to the wrist of the robot, placed at the point of grasping. The wrist of the robot may be oriented differently from the canonical world-axes.
 Use physical reasoning to complete the following plan in a structured format. Carefully map the required motion in the world to the required motion, forces, and torques at the wrist.
 
 [start of motion plan]
@@ -199,7 +199,7 @@ Reason about the provided and implicit information in the images and task descri
 - Prior knowledge of object material types and mass estimates
 - Environmental knowledge (table, gravity, hinge resistance, etc.)
 
-The left image is a robot workspace view labeled with the axes of motion relative to the wrist of the robot. The wrist of the robot may be oriented differently from the canonical world-axes, so this workspace view may help understand the wrist-relative motion to accomplish the task in the world.
+The left image is a robot workspace view labeled with the axes of motion relative to the wrist of the robot, placed at the point of grasping. The wrist of the robot may be oriented differently from the canonical world-axes, so this workspace view may help understand the wrist-relative motion to accomplish the task in the world.
 The right image is robot-wrist view labeled with the axes of motion relative to the wrist of the robot. This close up view of the wrist may help understand more precise wrist-relative motion, especially since the wrist will be attached, via the robot end-effector, directly to the object and moving it.
 Note that the wrist frame labeled on the workspace view is the same as the wrist frame labeled on the wrist view, but they may appear different on the image. However, motion along a labeled axis in either image will correspond to the same motion in the world frame.
 Use physical reasoning to complete the following plan in a structured format. Carefully map the required motion in the world to the required motion, forces, and torques at the wrist.
@@ -382,7 +382,7 @@ Reason about the provided and implicit information in the images and task descri
 - Force/torque sensing at the wrist
 - Environmental knowledge (table, gravity, hinge resistance, etc.)
 
-The image is a third-person view of the robot, labeled with the coordinate frame of the robot's base and world, which may be used to help with the mapping of the axes and understanding the environment
+The image is a third-person view of the robot, labeled with the base robot coordinate frame placed at the point of grasping, which may be used to help with the mapping of the axes and understanding the environment
 We must use the provided image data and physical reasoning to carefully map the true motion in the world frame to accomplish the task.
 We want to reason about forces and torques relative to the world frame.
 
@@ -480,7 +480,7 @@ Reason about the provided and implicit information in the images and task descri
 - Force/torque sensing at the wrist
 - Environmental knowledge (table, gravity, hinge resistance, etc.)
 
-The image is robot-wrist view labeled with the axes of motion relative to the base frame of the robot, as in the canonical world-axes (for example, the red positive Z-axis will always represent upward direction in the world).
+The image is robot-wrist view labeled with the axes of motion relative to the base robot coordinate frame, placed at the point of grasping, as in the canonical world-axes (for example, the red positive Z-axis will always represent upward direction in the world).
 We must use the provided image data and physical reasoning to carefully map the true motion in the world frame to accomplish the task.
 We want to reason about forces and torques relative to the world frame.
 
@@ -578,7 +578,7 @@ Reason about the provided and implicit information in the images and task descri
 - Force/torque sensing at the wrist
 - Environmental knowledge (table, gravity, hinge resistance, etc.)
 
-The left image is a robot-wrist view labeled with the axes of motion relative to the base frame of the robot, as in the canonical world-axes (for example, the red positive Z-axis will always represent upward direction in the world).
+The left image is a robot-wrist view labeled with the axes of motion relative to the base robot coordinate frame, placed at the point of grasping, as in the canonical world-axes (for example, the red positive Z-axis will always represent upward direction in the world).
 The right image is a third-person view of the robot, which may be used to help with the mapping of the axes and understanding the environment
 We must use the provided image data and physical reasoning to carefully map the true motion in the world frame to accomplish the task.
 We want to reason about forces and torques relative to the world frame.
