@@ -201,25 +201,27 @@ Reason about the provided and implicit information in the images and task descri
 
 The left image is a robot workspace view labeled with the axes of motion relative to the wrist of the robot. The wrist of the robot may be oriented differently from the canonical world-axes, so this workspace view may help understand the wrist-relative motion to accomplish the task in the world.
 The right image is robot-wrist view labeled with the axes of motion relative to the wrist of the robot. This close up view of the wrist may help understand more precise wrist-relative motion, especially since the wrist will be attached, via the robot end-effector, directly to the object and moving it.
+Note that the wrist frame labeled on the workspace view is the same as the wrist frame labeled on the wrist view, but they may appear different on the image. However, motion along a labeled axis in either image will correspond to the same motion in the world frame.
 Use physical reasoning to complete the following plan in a structured format. Carefully map the required motion in the world to the required motion, forces, and torques at the wrist.
 
 [start of motion plan]
 The task is to {task} while grasping the {obj}.
 
 Mapping World Motion to Wrist Motion:
-The provided workspace image on the left confirms {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to the requested task}}.
-The red axis on the left image represents wrist X-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist X-axis motion to motion in the world. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
-The green axis represents wrist Y-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Y-axis motion to motion in the world. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
-The blue axis represents wrist Z-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Z-axis motion to motion in the world. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
+The provided image with workspace and wrist views confirms {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to the requested task}}.
+The red axis in the left image represents wrist X-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist X-axis motion to motion in the world, including negative and positive motion. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
+Based off knowledge of the task and motion, in the wrist X-axis, the object must have {{CHOICE: [positive, negative, no]}} motion with magnitude {{NUM}} m, because {{DESCRIPTION: describe the object's required motion in the wrist X-axis to accomplish the task}}.
+The green axis in the left image represents wrist Y-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Y-axis motion to motion in the world, including negative and positive motion. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
+Based off knowledge of the task and motion, in the wrist Y-axis, the object must have {{CHOICE: [positive, negative, no]}} motion with magnitude {{NUM}} m, because {{DESCRIPTION: describe the object's required motion in the wrist Y-axis to accomplish the task}}.
+The blue axis in the left image represents wrist Z-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Z-axis motion to motion in the world, including negative and positive motion. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
+Based off knowledge of the task and motion, in the wrist Z-axis, the object must have {{CHOICE: [positive, negative, no]}} motion with magnitude {{NUM}} m, because {{DESCRIPTION: describe the object's required motion in the wrist Z-axis to accomplish the task}}.
 To accomplish the task in the wrist frame, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
 
-The right part of the image with the labeled wrist axes shows the wrist frame of the robot {{DESCRIPTION: describe the wrist frame and its axes of motion}}. Now, with an understanding of wrist-relative motion in the world from the left image, we can analyze the precise wrist-relative motion in the right image with the wrist-view.
-The blue dot going into (positive) the image represents wrist Z-axis motion. 
-Based off knowledge of the task and motion, in the wrist Z-axis, the object must move {{DESCRIPTION: the object's required motion in the wrist Z-axis to accomplish the task}}.
-The red axis going down (positive) the image represents wrist X-axis motion. 
-Based off knowledge of the task and motion, in the wrist X-axis, the object must move {{DESCRIPTION: the object's required motion in the wrist X-axis to accomplish the task}}.
-The green axis going left (positive) across the image represents wrist Y-axis motion. 
-Based off knowledge of the task and motion, in the wrist Y-axis, the object must move {{DESCRIPTION: the object's required motion in the wrist Y-axis to accomplish the task}}.
+The right part of the image with the labeled wrist axes shows the wrist frame of the robot {{DESCRIPTION: describe the wrist frame and its axes of motion}}. Now, with an understanding of wrist-relative motion in the world from the left image, we can potentially provide more precise wrist-relative motion by analyzing the wrist-view image, but the general direction of motion should stay the same as both images present the same frame, but labelled differently. 
+With this close up wrist view, we can update the wrist X-axis motion to move {{DESCRIPTION: describe any updated wrist X-axis motion deterined via analysis of the wrist-view image}}.
+With this close up wrist view, we can update the wrist Y-axis motion to move {{DESCRIPTION: describe any updated wrist Y-axis motion deterined via analysis of the wrist-view image}}.
+With this close up wrist view, we can update the wrist Z-axis motion to move {{DESCRIPTION: describe any updated wrist Z-axis motion deterined via analysis of the wrist-view image}}.
+
 To accomplish the task in the wrist frame, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
 
 Understanding Robot-Applied Forces and Torques to Move Object in the Wrist Frame:
@@ -269,13 +271,15 @@ duration = {{PNUM}}
 [end of motion plan]
 
 Rules:
-1. Replace all {{DESCRIPTION: ...}}, {{PNUM: ...}}, {{NUM: ...}}, and {{CHOICE}} entries with specific values or statements.
+1. Replace all {{DESCRIPTION: ...}}, {{PNUM}}, {{NUM}}, and {{CHOICE: ...}} entries with specific values or statements. For example, {{PNUM}} should be replaced with a number like 0.5. This is very important for downstream parsing!!
 2. Use best physical reasoning based on known robot/environmental capabilities. Remember that the robot may have to exert forces in additional axes compared to the motion direction axes in order to maintain contacts between the object, robot, and environment.
-3. Always include motion for all three axes, even if it's "No motion required."
+3. Always include motion for all axes of motion, even if it's "No motion required."
 4. Keep the explanation concise but physically grounded. Prioritize interpretability and reproducibility.
 5. Use common sense where exact properties are ambiguous, and explain assumptions.
 6. Do not include any sections outside the start/end blocks or add non-specified bullet points.
-7. Make sure to provide the final python code for each requested force in a code block.
+7. Make sure to provide the final python code for each requested force in a code block. Remember to fully replace the placeholder text with the actual values!
+8. Do not abbreviate the prompt when generating the response. Fully reproduce the template, but filled in with your reasoning.
+9. Make sure to refer to the provided correspondence in the direction guide between motion in the world frame and positive/negative motion in the respective axes.
 """
 
 ww_thinker = """
