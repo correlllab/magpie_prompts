@@ -2,7 +2,7 @@ wrist_base_string = "The left image is labeled with the axes of motion relative 
 wrist_wrist_string = "The right image is labeled with the axes of motion relative to the wrist of the robot. The wrist of the robot may be oriented differently from the canonical world-axes."
 third_base_string = "The middle image is a third-person view of the robot labeled with the base frame orientation of the robot, which may be used to help with the understanding the environmental properties and motion within the environment."
 
-wrist_base_third_thinker = """
+ww_wb_3b_thinker = """
 Given the user instruction and a three-part image containing a robot wrist-image view on the left, a third-person view in the middle, and another wrist view on the right, generate a structured physical plan for a robot end-effector interacting with the environment.
 The task is to {task} while grasping the {obj}.
 
@@ -99,8 +99,8 @@ Rules:
 7. Make sure to provide the final python code for each requested force in a code block.
 """
 
-wrist_base_thinker = """
-Given the user instruction and a two-part image containing a robot wrist-image view on the left and right but labeled with different coordinate frames, generate a structured physical plan for a robot end-effector interacting with the environment.
+wkspc_w_thinker = """
+Given the user instruction and an image of the robot workspace, generate a structured physical plan for a robot end-effector interacting with the environment.
 The task is to {task} while grasping the {obj}.
 
 The robot is controlled using position and torque-based control, with access to contact feedback and 6D motion capabilities. 
@@ -112,31 +112,20 @@ Reason about the provided and implicit information in the images and task descri
 - Prior knowledge of object material types and mass estimates
 - Environmental knowledge (table, gravity, hinge resistance, etc.)
 
-The left image is a robot wrist view labeled with the axes of motion relative to the base frame of the robot, as in the canonical world-axes (for example, the red positive Z-axis will always represent upward direction in the world).
-The right image is a robot wrist view labeled with the axes of motion relative to the wrist of the robot. The wrist of the robot may be oriented differently from the canonical world-axes.
+The image is a robot workspace view labeled with the axes of motion relative to the wrist of the robot. The wrist of the robot may be oriented differently from the canonical world-axes.
 Use physical reasoning to complete the following plan in a structured format. Carefully map the required motion in the world to the required motion, forces, and torques at the wrist.
 
 [start of motion plan]
 The task is to {task} while grasping the {obj}.
 
-Aligning Images With World Motion:
-The provided images in the three-part image confirm {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to the requested task}}.
-The blue axis representing the world Z-axis in the left and middle images corresponds to upward (positive) and downward (negative) motion in the world. 
-To complete the task, the object in the image should have {{CHOICE: [upward, downward, no]}} linear motion along the world Z-axis with magnitude {{PNUM}} meters.
-The red axis representing the world X-axis in the left and middle images corresponds to right (positive) and left (negative) motion in the world, relative to the robot. 
-To complete the task, the object in the image should have {{CHOICE: [leftward, rightward, no]}} linear motion along the world X-axis with magnitude {{PNUM}} meters.
-The green axis representing the world Y-axis in the left and middle images corresponds to forward (positive) and backward (negative) motion in the world, relative to the robot. 
-To complete the task, the object in the image should have {{CHOICE: [backward, forward, no]}} linear motion along the world Y-axis with magnitude {{PNUM}} meters.
-To accomplish the task in the world frame, the object must be moved {{DESCRIPTION: the object's required motion in the world frame to accomplish the task}}.
-
 Mapping World Motion to Wrist Motion:
-The right part of the image with the labeled wrist axes shows the wrist frame of the robot {{DESCRIPTION: describe the wrist frame and its axes of motion}}.
-The blue dot going into (positive) the image represents wrist Z-axis motion. 
-Based off knowledge of the task and motion, in the wrist Z-axis, the object must move {{DESCRIPTION: the object's required motion in the wrist Z-axis to accomplish the task}}.
-The red axis going down (positive) the image represents wrist X-axis motion. 
+The provided workspace image confirms {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to the requested task}}.
+The red axis represents wrist X-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist X-axis motion to motion in the world. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
 Based off knowledge of the task and motion, in the wrist X-axis, the object must move {{DESCRIPTION: the object's required motion in the wrist X-axis to accomplish the task}}.
-The green axis going left (positive) across the image represents wrist Y-axis motion. 
+The green axis represents wrist Y-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Y-axis motion to motion in the world. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
 Based off knowledge of the task and motion, in the wrist Y-axis, the object must move {{DESCRIPTION: the object's required motion in the wrist Y-axis to accomplish the task}}.
+The blue axis represents wrist Z-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Z-axis motion to motion in the world. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
+Based off knowledge of the task and motion, in the wrist Z-axis, the object must move {{DESCRIPTION: the object's required motion in the wrist Z-axis to accomplish the task}}.
 To accomplish the task in the wrist frame, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
 
 Understanding Robot-Applied Forces and Torques to Move Object in the Wrist Frame:
@@ -186,16 +175,18 @@ duration = {{PNUM}}
 [end of motion plan]
 
 Rules:
-1. Replace all {{DESCRIPTION: ...}}, {{PNUM: ...}}, {{NUM: ...}}, and {{CHOICE}} entries with specific values or statements.
+1. Replace all {{DESCRIPTION: ...}}, {{PNUM}}, {{NUM}}, and {{CHOICE: ...}} entries with specific values or statements. For example, {{PNUM}} should be replaced with a number like 0.5. This is very important for downstream parsing!!
 2. Use best physical reasoning based on known robot/environmental capabilities. Remember that the robot may have to exert forces in additional axes compared to the motion direction axes in order to maintain contacts between the object, robot, and environment.
-3. Always include motion for all three axes, even if it's "No motion required."
+3. Always include motion for all axes of motion, even if it's "No motion required."
 4. Keep the explanation concise but physically grounded. Prioritize interpretability and reproducibility.
 5. Use common sense where exact properties are ambiguous, and explain assumptions.
 6. Do not include any sections outside the start/end blocks or add non-specified bullet points.
-7. Make sure to provide the final python code for each requested force in a code block.
+7. Make sure to provide the final python code for each requested force in a code block. Remember to fully replace the placeholder text with the actual values!
+8. Do not abbreviate the prompt when generating the response. Fully reproduce the template, but filled in with your reasoning.
+9. Make sure to refer to the provided correspondence in the direction guide between motion in the world frame and positive/negative motion in the respective axes.
 """
 
-wrist_third_thinker = """
+ww_3w_thinker = """
 Given the user instruction and a two-part image containing a third-person view on the left, and a robot wrist view on the right, generate a structured physical plan for a robot end-effector interacting with the environment.
 The task is to {task} while grasping the {obj}.
 
@@ -208,15 +199,21 @@ Reason about the provided and implicit information in the images and task descri
 - Prior knowledge of object material types and mass estimates
 - Environmental knowledge (table, gravity, hinge resistance, etc.)
 
-The left image is a third-person view of the robot and the environment, which may be used to help with the understanding the environmental properties and motion within the environment.
-The right image is robot-wrist view labeled with the axes of motion relative to the wrist of the robot. The wrist of the robot may be oriented differently from the canonical world-axes.
+The left image is a robot workspace view labeled with the axes of motion relative to the wrist of the robot. The wrist of the robot may be oriented differently from the canonical world-axes, so this workspace view may help understand the wrist-relative motion to accomplish the task in the world.
+The right image is robot-wrist view labeled with the axes of motion relative to the wrist of the robot. This close up view of the wrist may help understand more precise wrist-relative motion, especially since the wrist will be attached, via the robot end-effector, directly to the object and moving it.
 Use physical reasoning to complete the following plan in a structured format. Carefully map the required motion in the world to the required motion, forces, and torques at the wrist.
 
 [start of motion plan]
 The task is to {task} while grasping the {obj}.
 
 Mapping World Motion to Wrist Motion:
-The right part of the image with the labeled wrist axes shows the wrist frame of the robot {{DESCRIPTION: describe the wrist frame and its axes of motion}}.
+The provided workspace image on the left confirms {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to the requested task}}.
+The red axis on the left image represents wrist X-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist X-axis motion to motion in the world. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
+The green axis represents wrist Y-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Y-axis motion to motion in the world. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
+The blue axis represents wrist Z-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Z-axis motion to motion in the world. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
+To accomplish the task in the wrist frame, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
+
+The right part of the image with the labeled wrist axes shows the wrist frame of the robot {{DESCRIPTION: describe the wrist frame and its axes of motion}}. Now, with an understanding of wrist-relative motion in the world from the left image, we can analyze the precise wrist-relative motion in the right image with the wrist-view.
 The blue dot going into (positive) the image represents wrist Z-axis motion. 
 Based off knowledge of the task and motion, in the wrist Z-axis, the object must move {{DESCRIPTION: the object's required motion in the wrist Z-axis to accomplish the task}}.
 The red axis going down (positive) the image represents wrist X-axis motion. 
@@ -281,7 +278,7 @@ Rules:
 7. Make sure to provide the final python code for each requested force in a code block.
 """
 
-wrist_thinker = """
+ww_thinker = """
 Given the user instruction and an image of the robot wrist view, generate a structured physical plan for a robot end-effector interacting with the environment.
 The task is to {task} while grasping the {obj}.
 
@@ -301,7 +298,7 @@ Use physical reasoning to complete the following plan in a structured format. Ca
 The task is to {task} while grasping the {obj}.
 
 Mapping World Motion to Wrist Motion:
-The right part of the image with the labeled wrist axes shows the wrist frame of the robot {{DESCRIPTION: describe the wrist frame and its axes of motion}}.
+The provided wrist view image on the confirms {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to the requested task}}.
 The blue dot going into (positive) the image represents wrist Z-axis motion. 
 Based off knowledge of the task and motion, in the wrist Z-axis, the object must move {{DESCRIPTION: the object's required motion in the wrist Z-axis to accomplish the task}}.
 The red axis going down (positive) the image represents wrist X-axis motion. 
@@ -357,16 +354,18 @@ duration = {{PNUM}}
 [end of motion plan]
 
 Rules:
-1. Replace all {{DESCRIPTION: ...}}, {{PNUM: ...}}, {{NUM: ...}}, and {{CHOICE}} entries with specific values or statements.
+1. Replace all {{DESCRIPTION: ...}}, {{PNUM}}, {{NUM}}, and {{CHOICE: ...}} entries with specific values or statements. For example, {{PNUM}} should be replaced with a number like 0.5. This is very important for downstream parsing!!
 2. Use best physical reasoning based on known robot/environmental capabilities. Remember that the robot may have to exert forces in additional axes compared to the motion direction axes in order to maintain contacts between the object, robot, and environment.
-3. Always include motion for all three axes, even if it's "No motion required."
+3. Always include motion for all axes of motion, even if it's "No motion required."
 4. Keep the explanation concise but physically grounded. Prioritize interpretability and reproducibility.
 5. Use common sense where exact properties are ambiguous, and explain assumptions.
 6. Do not include any sections outside the start/end blocks or add non-specified bullet points.
-7. Make sure to provide the final python code for each requested force in a code block.
+7. Make sure to provide the final python code for each requested force in a code block. Remember to fully replace the placeholder text with the actual values!
+8. Do not abbreviate the prompt when generating the response. Fully reproduce the template, but filled in with your reasoning.
+9. Make sure to refer to the provided correspondence in the direction guide between motion in the world frame and positive/negative motion in the respective axes.
 """
 
-third_thinker = """
+wkspc_b_thinker = """
 Given the user instruction and an image containing a third-person view of a robot and its environment, generate a structured physical plan for a robot end-effector interacting with the environment.
 The task is to {task} while grasping the {obj}.
 
@@ -464,7 +463,7 @@ Rules:
 9. Make sure to refer to the provided correspondence in the direction guide between motion in the world frame and positive/negative motion in the respective axes.
 """
 
-base_thinker = """
+wb_thinker = """
 Given the user instruction and an image of a robot wrist-image view, generate a structured physical plan for a robot end-effector interacting with the environment.
 The task is to {task} while grasping the {obj}.
 
@@ -562,7 +561,7 @@ Rules:
 9. Make sure to refer to the provided correspondence in the direction guide between motion in the world frame and positive/negative motion in the respective axes.
 """
 
-base_third_thinker = """
+wb_3b_thinker = """
 Given the user instruction and two-part image containing a robot wrist-image view on the left, a third-person view on the right, generate a structured physical plan for a robot end-effector interacting with the environment.
 The task is to {task} while grasping the {obj}.
 
@@ -679,7 +678,7 @@ class PromptForceThinker(llm_prompt.LLMPrompt):
     self.name = "LanguageAndVision2StructuredForceMotionParameters"
 
     self.num_llms = 1
-    self.prompts = [base_third_thinker]
+    self.prompts = [ww_3w_thinker]
 
     # The coder doesn't need to keep the history as it only serves a purpose for
     # translating to code
