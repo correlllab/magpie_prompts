@@ -186,8 +186,11 @@ Rules:
 9. Make sure to refer to the provided correspondence in the direction guide between motion in the world frame and positive/negative motion in the respective axes.
 """
 
+world_chair_reference = 'As ground truth reference, "forward" motion in the world corresponds to motion toward the workspace camera view, "upward" motion in the world corresponds to motion up from the workspace camera view image, and "right" motion in the world corresponds to motion to the left of the workspace camera view image.'
+world_table_reference = 'As ground truth reference for world motion relative to the robot, "forward" motion in the world corresponds to motion down the left workspace camera view, "upward" and "downward" motion in the world corresponds to motion out of and into, respectively, the the left workspace camera view image, and "right" motion in the world corresponds to motion to the left of the workspace camera view image. '
+
 ww_3w_thinker = """
-Given the user instruction and a two-part image containing a third-person view on the left, and a robot wrist view on the right, generate a structured physical plan for a robot end-effector interacting with the environment.
+Given the user instruction and a two images containing a third-person view on the left, and a robot wrist view on the right, generate a structured physical plan for a robot end-effector interacting with the environment.
 The task is to {task} while grasping the {obj}.
 
 The robot is controlled using position and torque-based control, with access to contact feedback and 6D motion capabilities. 
@@ -199,29 +202,30 @@ Reason about the provided and implicit information in the images and task descri
 - Prior knowledge of object material types and mass estimates
 - Environmental knowledge (table, gravity, hinge resistance, etc.)
 
-The left image is a robot workspace view labeled with the axes of motion relative to the wrist of the robot, placed at the point of grasping. The wrist of the robot may be oriented differently from the canonical world-axes, so this workspace view may help understand the wrist-relative motion to accomplish the task in the world.
-The right image is robot-wrist view labeled with the axes of motion relative to the wrist of the robot. This close up view of the wrist may help understand more precise wrist-relative motion, especially since the wrist will be attached, via the robot end-effector, directly to the object and moving it.
-Note that the wrist frame labeled on the workspace view is the same as the wrist frame labeled on the wrist view, but they may appear different on the image. However, motion along a labeled axis in either image will correspond to the same motion in the world frame.
-Use physical reasoning to complete the following plan in a structured format. Carefully map the required motion in the world to the required motion, forces, and torques at the wrist.
+The robot workspace view labeled with the axes of motion relative to the wrist of the robot, placed at the point of grasping. The wrist of the robot may be oriented differently from the canonical world-axes, so this workspace view may help understand the wrist-relative motion to accomplish the task in the world.
+The robot-wrist view labeled with the axes of motion relative to the wrist of the robot. This close up view of the wrist may help understand more precise wrist-relative motion, especially since the wrist will be attached, via the robot end-effector, directly to the object and moving it.
+As ground truth reference for world motion relative to the robot, "forward" motion in the world corresponds to motion down the left workspace camera view, "upward" and "downward" motion in the world corresponds to motion out of and into, respectively, the the left workspace camera view image, and "right" motion in the world corresponds to motion to the left of the workspace camera view image.
+Use physical reasoning to complete the following plan in a structured format. First look at the workspace-view image to carefully map the required motion in the world to the required motion, forces, and torques at the wrist.
+However, the labelled wrist coordinate frames will likely differ or even be opposite of this description, so we must carefully analyze the images to understand the mapping of wrist motion to the world.
+Do not overfit to the wrist view, as it is not a global perspective. For example, even though the wrist-view red X-axis points up the image, does not necessarily mean that the wrist X-axis corresponds to upward motion. The workspace view is more global and should help determine world motion, primarily, and the wrist view is more local. Use the wrist view to clarify ambiguities in the workspace view if motion is not clear.
 
 [start of motion plan]
 The task is to {task} while grasping the {obj}.
 
 Mapping World Motion to Wrist Motion:
-The provided image with workspace and wrist views confirms {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to the requested task}}.
-The red axis in the left image represents wrist X-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist X-axis motion to motion in the world, including negative and positive motion. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
-Based off knowledge of the task and motion, in the wrist X-axis, the object must have {{CHOICE: [positive, negative, no]}} motion with magnitude {{NUM}} m, because {{DESCRIPTION: describe the object's required motion in the wrist X-axis to accomplish the task}}.
-The green axis in the left image represents wrist Y-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Y-axis motion to motion in the world, including negative and positive motion. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
-Based off knowledge of the task and motion, in the wrist Y-axis, the object must have {{CHOICE: [positive, negative, no]}} motion with magnitude {{NUM}} m, because {{DESCRIPTION: describe the object's required motion in the wrist Y-axis to accomplish the task}}.
-The blue axis in the left image represents wrist Z-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Z-axis motion to motion in the world, including negative and positive motion. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
-Based off knowledge of the task and motion, in the wrist Z-axis, the object must have {{CHOICE: [positive, negative, no]}} motion with magnitude {{NUM}} m, because {{DESCRIPTION: describe the object's required motion in the wrist Z-axis to accomplish the task}}.
-To accomplish the task in the wrist frame, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
+The provided images with workspace and wrist views confirm {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to the requested task}}.
+The red axis in the workspace-view image represents wrist X-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist X-axis motion to motion in the world, including negative and positive motion (the labelled axis arrow points in the direction of wrist-axis relative positive motion). It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
+The green axis in the workspace-view image represents wrist Y-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Y-axis motion to motion in the world, including negative and positive motion (the labelled axis arrow points in the direction of wrist-axis relative positive motion). It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
+The blue axis in the workspace-view image represents wrist Z-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Z-axis motion to motion in the world, including negative and positive motion (the labelled axis arrow points in the direction of wrist-axis relative positive motion). It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
 
-The right part of the image with the labeled wrist axes shows the wrist frame of the robot {{DESCRIPTION: describe the wrist frame and its axes of motion}}. Now, with an understanding of wrist-relative motion in the world from the left image, we can potentially provide more precise wrist-relative motion by analyzing the wrist-view image, but the general direction of motion should stay the same as both images present the same frame, but labelled differently. 
-With this close up wrist view, we can update the wrist X-axis motion to move {{DESCRIPTION: describe any updated wrist X-axis motion deterined via analysis of the wrist-view image}}.
-With this close up wrist view, we can update the wrist Y-axis motion to move {{DESCRIPTION: describe any updated wrist Y-axis motion deterined via analysis of the wrist-view image}}.
-With this close up wrist view, we can update the wrist Z-axis motion to move {{DESCRIPTION: describe any updated wrist Z-axis motion deterined via analysis of the wrist-view image}}.
+The right part of the image with the labeled wrist axes shows the wrist frame of the robot {{DESCRIPTION: describe the wrist frame and its axes of motion}}. Now, with an understanding of wrist-relative motion in the world from the workspace view, we can potentially provide more accurate wrist-relative motion by analyzing the wrist-view image. 
+With this close up view of the red wrist X-axis, we can update the wrist X-axis motion to move {{DESCRIPTION: describe any updated wrist X-axis motion determined via analysis of the wrist-view image}}.
+With this close up view of the green wrist Y-axis, we can update the wrist Y-axis motion to move {{DESCRIPTION: describe any updated wrist Y-axis motion determined via analysis of the wrist-view image}}.
+With this close up view of the blue dot into the page representing wrist Z-axis, we can update the wrist Z-axis motion to move {{DESCRIPTION: describe any updated wrist Z-axis motion determined via analysis of the wrist-view image}}.
 
+Based off knowledge of the task and motion, in the wrist X-axis, the object must have {{CHOICE: [positive, negative, no]}} motion with magnitude {{NUM}} m.
+Based off knowledge of the task and motion, in the wrist Y-axis, the object must have {{CHOICE: [positive, negative, no]}} motion with magnitude {{NUM}} m.
+Based off knowledge of the task and motion, in the wrist Z-axis, the object must have {{CHOICE: [positive, negative, no]}} motion with magnitude {{NUM}} m.
 To accomplish the task in the wrist frame, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
 
 Understanding Robot-Applied Forces and Torques to Move Object in the Wrist Frame:
@@ -578,7 +582,7 @@ Reason about the provided and implicit information in the images and task descri
 - Force/torque sensing at the wrist
 - Environmental knowledge (table, gravity, hinge resistance, etc.)
 
-The left image is a robot-wrist view labeled with the axes of motion relative to the base robot coordinate frame, placed at the point of grasping, as in the canonical world-axes (for example, the red positive Z-axis will always represent upward direction in the world).
+The left image is a robot-wrist view labeled with the axes of motion relative to the base robot coordinate frame, placed at the point of, as in the canonical world-axes (for example, the red positive Z-axis will always represent upward direction in the world).
 The right image is a third-person view of the robot, which may be used to help with the mapping of the axes and understanding the environment
 We must use the provided image data and physical reasoning to carefully map the true motion in the world frame to accomplish the task.
 We want to reason about forces and torques relative to the world frame.
