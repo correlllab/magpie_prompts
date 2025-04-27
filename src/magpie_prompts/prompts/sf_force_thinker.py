@@ -60,7 +60,7 @@ Physical Model (if applicable):
 - Relevant equations: {{DESCRIPTION: include any relevant equations used in the calculations}}.
 - Relevant assumptions: {{DESCRIPTION: include any relevant assumptions made in the calculations}}.
 - Computations: {{DESCRIPTION: include in full detail any relevant calculations using the above information}}.
-- Force/torque motion computations with object of mass {{NUM}} kg and static friction coefficient of {{NUM}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the surface friction using appropriate formulae and quantities}}.
+- Force/torque motion computations with object of mass {{NUM}} kg and static friction coefficient of {{NUM}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the force required to overcome friction and achieve the task}}.
 
 Wrist Force/Torque Motion Estimation:
 Linear X-axis:  To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: [positive, negative, no]}} force along the X-axis with magnitude {{PNUM}} N.
@@ -105,6 +105,7 @@ The task is to {task} while grasping the {obj}.
 
 The robot is controlled using position and torque-based control, with access to contact feedback and 6D motion capabilities. 
 Motions can include grasping, lifting, pushing, tapping, sliding, rotating, or any interaction with objects or surfaces.
+Motion can resolve across multiple axes, so be careful to consider all axes of motion to accomplish the task.
 
 Reason about the provided and implicit information in the images and task description to generate a structured plan for the robot's motion. Think about:
 - Object geometry and contact points (from the image)
@@ -112,20 +113,22 @@ Reason about the provided and implicit information in the images and task descri
 - Prior knowledge of object material types and mass estimates
 - Environmental knowledge (table, gravity, hinge resistance, etc.)
 
-The image is a robot workspace view labeled with the axes of motion relative to the wrist of the robot, placed at the point of grasping. The wrist of the robot may be oriented differently from the canonical world-axes.
+The robot workspace view labeled with the axes of motion relative to the wrist of the robot, placed at the point of grasping. The wrist of the robot may be oriented differently from the canonical world-axes, so this workspace view may help understand the wrist-relative motion to accomplish the task in the world.
+World Motion Reference: {world_reference}
 Use physical reasoning to complete the following plan in a structured format. Carefully map the required motion in the world to the required motion, forces, and torques at the wrist.
 
 [start of motion plan]
 The task is to {task} while grasping the {obj}.
 
 Mapping World Motion to Wrist Motion:
-The provided workspace image confirms {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to the requested task}}.
-The red axis represents wrist X-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist X-axis motion to motion in the world. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
-Based off knowledge of the task and motion, in the wrist X-axis, the object must move {{DESCRIPTION: the object's required motion in the wrist X-axis to accomplish the task}}.
-The green axis represents wrist Y-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Y-axis motion to motion in the world. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
-Based off knowledge of the task and motion, in the wrist Y-axis, the object must move {{DESCRIPTION: the object's required motion in the wrist Y-axis to accomplish the task}}.
-The blue axis represents wrist Z-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Z-axis motion to motion in the world. It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
+The provided workspace image confirms {{DESCRIPTION: the object and environment in the image and their properties, such as spatial relationships, color, shape, and material, and their correspondence to the requested task}}.
+The labeled wrist axes correspond to the world as such: {{DESCRIPTION: describe in detail the labeled wrist frame's axes of motion and their correspondence to the motion in the depicted world, utilizing the provided World Motion Reference}}.
+The blue axis represents wrist Z-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Z-axis (positive and negative) motion to motion in the world with careful analysis.}}.
 Based off knowledge of the task and motion, in the wrist Z-axis, the object must move {{DESCRIPTION: the object's required motion in the wrist Z-axis to accomplish the task}}.
+The red axis represents wrist X-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist X-axis (positive and negative) motion to motion in the world with careful analysis.}}.
+Based off knowledge of the task and motion, in the wrist X-axis, the object must move {{DESCRIPTION: the object's required motion in the wrist X-axis to accomplish the task}}.
+The green axis represents wrist Y-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Y-axis (positive and negative) motion to motion in the world with careful analysis.}}.
+Based off knowledge of the task and motion, in the wrist Y-axis, the object must move {{DESCRIPTION: the object's required motion in the wrist Y-axis to accomplish the task}}.
 To accomplish the task in the wrist frame, the object must be moved {{DESCRIPTION: the object's required motion in the wrist frame to accomplish the task}}.
 
 Understanding Robot-Applied Forces and Torques to Move Object in the Wrist Frame:
@@ -145,7 +148,8 @@ Physical Model (if applicable):
 - Relevant equations: {{DESCRIPTION: include any relevant equations used in the calculations}}.
 - Relevant assumptions: {{DESCRIPTION: include any relevant assumptions made in the calculations}}.
 - Computations: {{DESCRIPTION: include in full detail any relevant calculations using the above information}}.
-- Force/torque motion computations with object of mass {{NUM}} kg and static friction coefficient of {{NUM}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the surface friction using appropriate formulae and quantities}}.
+- Force/torque motion computations with object of mass {{NUM}} kg and static friction coefficient of {{NUM}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the force required to overcome friction and achieve the task}}.
+
 
 Wrist Force/Torque Motion Estimation:
 Linear X-axis:  To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: [positive, negative, no]}} force along the X-axis with magnitude {{PNUM}} N.
@@ -186,9 +190,6 @@ Rules:
 9. Make sure to refer to the provided correspondence in the direction guide between motion in the world frame and positive/negative motion in the respective axes.
 """
 
-world_chair_reference = 'As ground truth reference, "forward" motion in the world corresponds to motion toward the workspace camera view, "upward" motion in the world corresponds to motion up from the workspace camera view image, and "right" motion in the world corresponds to motion to the left of the workspace camera view image.'
-world_table_reference = 'As ground truth reference for world motion relative to the robot, "forward" motion in the world corresponds to motion down the left workspace camera view, "upward" and "downward" motion in the world corresponds to motion out of and into, respectively, the the left workspace camera view image, and "right" motion in the world corresponds to motion to the left of the workspace camera view image. '
-
 ww_3w_thinker = """
 Given the user instruction and a two images containing a third-person view on the left, and a robot wrist view on the right, generate a structured physical plan for a robot end-effector interacting with the environment.
 The task is to {task} while grasping the {obj}.
@@ -204,7 +205,7 @@ Reason about the provided and implicit information in the images and task descri
 
 The robot workspace view labeled with the axes of motion relative to the wrist of the robot, placed at the point of grasping. The wrist of the robot may be oriented differently from the canonical world-axes, so this workspace view may help understand the wrist-relative motion to accomplish the task in the world.
 The robot-wrist view labeled with the axes of motion relative to the wrist of the robot. This close up view of the wrist may help understand more precise wrist-relative motion, especially since the wrist will be attached, via the robot end-effector, directly to the object and moving it.
-As ground truth reference for world motion relative to the robot, "forward" motion in the world corresponds to motion down the left workspace camera view, "upward" and "downward" motion in the world corresponds to motion out of and into, respectively, the the left workspace camera view image, and "right" motion in the world corresponds to motion to the left of the workspace camera view image.
+World Motion Reference: {world_reference}
 Use physical reasoning to complete the following plan in a structured format. First look at the workspace-view image to carefully map the required motion in the world to the required motion, forces, and torques at the wrist.
 However, the labelled wrist coordinate frames will likely differ or even be opposite of this description, so we must carefully analyze the images to understand the mapping of wrist motion to the world.
 Do not overfit to the wrist view, as it is not a global perspective. For example, even though the wrist-view red X-axis points up the image, does not necessarily mean that the wrist X-axis corresponds to upward motion. The workspace view is more global and should help determine world motion, primarily, and the wrist view is more local. Use the wrist view to clarify ambiguities in the workspace view if motion is not clear.
@@ -214,11 +215,11 @@ The task is to {task} while grasping the {obj}.
 
 Mapping World Motion to Wrist Motion:
 The provided images with workspace and wrist views confirm {{DESCRIPTION: the object and environment in the image and their properties, such as color, shape, and material, and their correspondence to the requested task}}.
-The red axis in the workspace-view image represents wrist X-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist X-axis motion to motion in the world, including negative and positive motion (the labelled axis arrow points in the direction of wrist-axis relative positive motion). It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
-The green axis in the workspace-view image represents wrist Y-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Y-axis motion to motion in the world, including negative and positive motion (the labelled axis arrow points in the direction of wrist-axis relative positive motion). It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
-The blue axis in the workspace-view image represents wrist Z-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Z-axis motion to motion in the world, including negative and positive motion (the labelled axis arrow points in the direction of wrist-axis relative positive motion). It can correspond to arbitrary motion, so analyize the labeled carefully.}}.
+The red axis in the workspace-view image represents wrist X-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist X-axis motion to motion in the world, including negative and positive motion (the labelled axis arrow points in the direction of wrist-axis relative positive motion). It can correspond to arbitrary motion, so analyize the labeled axis carefully.}}.
+The green axis in the workspace-view image represents wrist Y-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Y-axis motion to motion in the world, including negative and positive motion (the labelled axis arrow points in the direction of wrist-axis relative positive motion). It can correspond to arbitrary motion, so analyize the labeled axis carefully.}}.
+The blue axis in the workspace-view image represents wrist Z-axis motion. It roughly corresponds to {{DESCRIPTION: describe the wrist Z-axis motion to motion in the world, including negative and positive motion (the labelled axis arrow points in the direction of wrist-axis relative positive motion). It can correspond to arbitrary motion, so analyize the labeled axis carefully.}}.
 
-The right part of the image with the labeled wrist axes shows the wrist frame of the robot {{DESCRIPTION: describe the wrist frame and its axes of motion}}. Now, with an understanding of wrist-relative motion in the world from the workspace view, we can potentially provide more accurate wrist-relative motion by analyzing the wrist-view image. 
+The image with the labeled wrist axes shows the wrist frame of the robot {{DESCRIPTION: describe the wrist frame and its axes of motion}}. Now, with an understanding of wrist-relative motion in the world from the workspace view, we can potentially provide more accurate wrist-relative motion by analyzing the wrist-view image. 
 With this close up view of the red wrist X-axis, we can update the wrist X-axis motion to move {{DESCRIPTION: describe any updated wrist X-axis motion determined via analysis of the wrist-view image}}.
 With this close up view of the green wrist Y-axis, we can update the wrist Y-axis motion to move {{DESCRIPTION: describe any updated wrist Y-axis motion determined via analysis of the wrist-view image}}.
 With this close up view of the blue dot into the page representing wrist Z-axis, we can update the wrist Z-axis motion to move {{DESCRIPTION: describe any updated wrist Z-axis motion determined via analysis of the wrist-view image}}.
@@ -245,7 +246,8 @@ Physical Model (if applicable):
 - Relevant equations: {{DESCRIPTION: include any relevant equations used in the calculations}}.
 - Relevant assumptions: {{DESCRIPTION: include any relevant assumptions made in the calculations}}.
 - Computations: {{DESCRIPTION: include in full detail any relevant calculations using the above information}}.
-- Force/torque motion computations with object of mass {{NUM}} kg and static friction coefficient of {{NUM}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the surface friction using appropriate formulae and quantities}}.
+- Force/torque motion computations with object of mass {{NUM}} kg and static friction coefficient of {{NUM}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the force required to overcome friction and achieve the task}}.
+
 
 Wrist Force/Torque Motion Estimation:
 Linear X-axis:  To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: [positive, negative, no]}} force along the X-axis with magnitude {{PNUM}} N.
@@ -332,7 +334,8 @@ Physical Model (if applicable):
 - Relevant equations: {{DESCRIPTION: include any relevant equations used in the calculations}}.
 - Relevant assumptions: {{DESCRIPTION: include any relevant assumptions made in the calculations}}.
 - Computations: {{DESCRIPTION: include in full detail any relevant calculations using the above information}}.
-- Force/torque motion computations with object of mass {{NUM}} kg and static friction coefficient of {{NUM}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the surface friction using appropriate formulae and quantities}}.
+- Force/torque motion computations with object of mass {{NUM}} kg and static friction coefficient of {{NUM}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the force required to overcome friction and achieve the task}}.
+
 
 Wrist Force/Torque Motion Estimation:
 Linear X-axis:  To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: [positive, negative, no]}} force along the X-axis with magnitude {{PNUM}} N.
@@ -421,7 +424,8 @@ Physical Model Computations:
 - Relevant assumptions: {{DESCRIPTION: include any relevant assumptions made in the calculations}}.
 - Computations: {{DESCRIPTION: include in full detail any relevant calculations using the above information}}.
 - Grasping force computations: {{DESCRIPTION: typically, using the estimated mass m and estimated gripper-object friction mu, a good grasping force is (m*g)/mu. Use this calculation first and only modify it if deemed appropriate}}.
-- Force/torque motion computations with object of mass {{NUM}} kg and static friction coefficient of {{NUM}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the surface friction using appropriate formulae and quantities}}.
+- Force/torque motion computations with object of mass {{NUM}} kg and static friction coefficient of {{NUM}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the force required to overcome friction and achieve the task}}.
+
 
 Force/Torque Motion Estimation:
 Linear X-axis:  To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: [leftward, rightward, no]}} force along the X-axis with magnitude {{PNUM}} N.
@@ -519,7 +523,8 @@ Physical Model Computations:
 - Relevant assumptions: {{DESCRIPTION: include any relevant assumptions made in the calculations}}.
 - Computations: {{DESCRIPTION: include in full detail any relevant calculations using the above information}}.
 - Grasping force computations: {{DESCRIPTION: typically, using the estimated mass m and estimated gripper-object friction mu, a good grasping force is (m*g)/mu. Use this calculation first and only modify it if deemed appropriate}}.
-- Force/torque motion computations with object of mass {{NUM}} kg and static friction coefficient of {{NUM}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the surface friction using appropriate formulae and quantities}}.
+- Force/torque motion computations with object of mass {{NUM}} kg and static friction coefficient of {{NUM}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the force required to overcome friction and achieve the task}}.
+
 
 Force/Torque Motion Estimation:
 Linear X-axis:  To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: [leftward, rightward, no]}} force along the X-axis with magnitude {{PNUM}} N.
@@ -618,7 +623,8 @@ Physical Model Computations:
 - Relevant assumptions: {{DESCRIPTION: include any relevant assumptions made in the calculations}}.
 - Computations: {{DESCRIPTION: include in full detail any relevant calculations using the above information}}.
 - Grasping force computations: {{DESCRIPTION: typically, using the estimated mass m and estimated gripper-object friction mu, a good grasping force is (m*g)/mu. Use this calculation first and only modify it if deemed appropriate}}.
-- Force/torque motion computations with object of mass {{NUM}} kg and static friction coefficient of {{NUM}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the surface friction using appropriate formulae and quantities}}.
+- Force/torque motion computations with object of mass {{NUM}} kg and static friction coefficient of {{NUM}} along the surface: {{DESCRIPTION: for the derived or estimated motion, compute the force required to overcome friction and achieve the task}}.
+
 
 Force/Torque Motion Estimation:
 Linear X-axis:  To complete the task and based upon {{DESCRIPTION: reasoning about and estimation of task physical properties}}, the object in the image must exert {{CHOICE: [leftward, rightward, no]}} force along the X-axis with magnitude {{PNUM}} N.
