@@ -87,9 +87,29 @@ def build_messages(text=None, image=None, messages=[], model_type="gemini", role
             "content": content
         }
         messages.append(message)
+    elif model_type == "claude":        
+        content_items = []
+        # Add text content if provided
+        if text is not None:
+            content_items.append({"type": "text", "text": text})
+        if image is not None:
+            content_items.append({
+                "type": "image",
+                "source": {
+                    "type": "base64", 
+                    "media_type": "image/jpeg",
+                    "data": openai_encode_image(image)
+                }
+            })
+        
+        message = {
+            "role": role,
+            "content": content_items
+        }
+        messages.append(message)
     return messages
 
-def send_message(client, model, messages=[], model_type="gemini"):
+def send_message(client, model, messages=[], model_type="gemini", temperature=0.7, max_tokens=2400):
     '''
     Sends a list of messages to the specified client and model.
 
@@ -112,6 +132,15 @@ def send_message(client, model, messages=[], model_type="gemini"):
             input=messages,
         )
         text = response.output_text
+    elif model_type == "claude":
+        # Claude API format
+        response = client.messages.create(
+            model=model,
+            messages=messages,
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        text = response.content[0].text
     else:
         raise ValueError("Invalid model type. Choose either 'gemini' or 'openai'.")
     return text
