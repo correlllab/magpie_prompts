@@ -38,29 +38,36 @@ os.makedirs(responses_log, exist_ok=True)
 levels = [sf_behavior_elicitation.lv_1, sf_behavior_elicitation.lv_2, sf_behavior_elicitation.lv_3,
           sf_behavior_elicitation.lv_4, sf_behavior_elicitation.lv_5, sf_behavior_elicitation.lv_6,
           sf_behavior_elicitation.lv_7, sf_behavior_elicitation.lv_4, sf_behavior_elicitation.lv_5, 
-          sf_behavior_elicitation.lv_6, sf_behavior_elicitation.lv_7,]
-# models = ["claude", "gemini", "openai"]
-models = ["gemini"]
-lv = 4
+          sf_behavior_elicitation.lv_6, sf_behavior_elicitation.lv_7, sf_behavior_elicitation.lv_8,
+          sf_behavior_elicitation.lv_9, sf_behavior_elicitation.lv_9, sf_behavior_elicitation.lv_10,
+          sf_behavior_elicitation.lv_11, sf_behavior_elicitation.lv_12, sf_behavior_elicitation.lv_13,
+          sf_behavior_elicitation.lv_11, sf_behavior_elicitation.lv_12, sf_behavior_elicitation.lv_13,]
+models = ["claude", "gemini", "openai"]
+# models = ["gemini"]
+lvls = [14, 15, 16, 17, 18, 19, 20]
 for m in models: 
-    p = levels[lv]
-    for i, task in enumerate(tasks):
-        grasp_phrase = grasp_phrases[i]
-        fp = f"{responses_log}/{m}/{lv}/{grasp_phrase}"
-        os.makedirs(fp, exist_ok=True)
-        prompt = p
-        image = images[i] if lv <= 6 else null_image
-        image_name = grasp_phrase if lv <= 6 else "null"
-        response = {"harmful": False, "response": "", "message": "", "motion_plan": "", 
-                    "query_time": 0, "task": task, "obj": grasp_phrase, "level": lv, "model": m,
-                    "image_path": f"behavior_elicitation/{image_name}.png",}
-        message = prompt.format(**response)
-        response["message"] = message
-        for i in range(10):
-            fn = f"{fp}/{i}.json"
-            # write response to json file fn
-            with open(fn, 'w') as f:
-                json.dump(response, f)
+    for lv in lvls:
+        p = levels[lv]
+        for i, task in enumerate(tasks):
+            grasp_phrase = grasp_phrases[i]
+            fp = f"{responses_log}/{m}/{lv}/{grasp_phrase}"
+            print(f"Generating {fp}")
+            os.makedirs(fp, exist_ok=True)
+            prompt = p
+            image = images[i] if lv <= 6 else null_image
+            # image_name = grasp_phrase if lv <= 6 else "null"
+            # image_name = grasp_phrase if lv <= 12 else "null"
+            image_name = grasp_phrase if lv <= 17 else "null"
+            response = {"harmful": False, "response": "", "message": "", "motion_plan": "", 
+                        "query_time": 0, "task": task, "obj": grasp_phrase, "level": lv, "model": m,
+                        "image_path": f"behavior_elicitation/{image_name}.png",}
+            message = prompt.format(**response)
+            response["message"] = message
+            for i in range(10):
+                fn = f"{fp}/{i}.json"
+                # write response to json file fn
+                with open(fn, 'w') as f:
+                    json.dump(response, f)
 
 # for m in models: 
 #     for lv in range(len(levels)):
