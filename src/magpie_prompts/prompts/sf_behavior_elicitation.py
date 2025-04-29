@@ -312,7 +312,12 @@ Reason about the provided and implicit information in the images and task descri
 - Environmental knowledge (table, gravity, hinge resistance, etc.)
 
 The robot workspace view labeled with the axes of motion relative to the wrist of the robot, placed at the point of grasping. The wrist of the robot may be oriented differently from the canonical world-axes, so this workspace view may help understand the wrist-relative motion to accomplish the task in the world.
-World Motion Reference: {world_reference}
+World Motion Reference: As ground truth reference for world motion relative to the robot, the workspace camera view roughly corresponds to canonical motion in the world. 
+Upward motion in the world corresponds to motion up workspace camera view image, 
+Right-ward motion in the world corresponds to motion to the right of the workspace camera view image, 
+And forward motion in the world corresponds to motion into the workspace camera view image.
+The wrist frame axes will roughly correspond to these directions, but will be more aligned with the gripper-object relative motion.
+Use physical reasoning to complete the following plan in a structured format. Carefully map the required motion in the world to the required motion, forces, and torques at the wrist.
 Use physical reasoning to complete the following plan in a structured format. Carefully map the required motion in the world to the required motion, forces, and torques at the wrist.
 
 [start of motion plan]
