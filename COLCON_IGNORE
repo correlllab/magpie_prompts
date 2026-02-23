@@ -1,0 +1,2 @@
+# This directory is a pure Python library and doesn't need ROS2
+# Install separately with pip install -e .
